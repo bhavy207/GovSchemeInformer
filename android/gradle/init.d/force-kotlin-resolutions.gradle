@@ -1,0 +1,85 @@
+// Applied to the Gradle invocation (including included builds) to force
+// a single Kotlin/stdlib/runtime version so Flutter's Gradle tooling
+// (which uses newer kotlin.io.path APIs) compiles correctly.
+
+allprojects {
+  configurations.all {
+    // Force all relevant Kotlin artifacts to a single, up-to-date version.
+    resolutionStrategy.force(
+      'org.jetbrains.kotlin:kotlin-stdlib:1.9.20',
+      'org.jetbrains.kotlin:kotlin-stdlib-common:1.9.20',
+      'org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.20',
+      'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.20',
+      'org.jetbrains.kotlin:kotlin-reflect:1.9.20',
+      'org.jetbrains.kotlin:kotlin-compiler-embeddable:1.9.20',
+      'org.jetbrains.kotlin:kotlin-util-io:1.9.20'
+    )
+
+    // As an extra guard, prefer the newest module if a transitive brings an older one.
+    resolutionStrategy.eachDependency { details ->
+      if (details.requested.group == 'org.jetbrains.kotlin') {
+        details.useVersion '1.9.20'
+        details.because 'Align Kotlin artifacts so kotlin.io.path APIs are available to included builds'
+      }
+    }
+  }
+}
+
+// Also ensure plugin resolution (for pluginManagement in included builds)
+// prefers the requested Kotlin plugin version where applicable.
+gradle.settingsEvaluated { settings ->
+  settings.pluginManagement.resolutionStrategy.eachPlugin { details ->
+    if (details.requested.id.id.startsWith('org.jetbrains.kotlin')) {
+      details.useVersion('1.9.20')
+    }
+  }
+}
+
+// Ensure the Flutter tooling included-build (project named 'gradle') has the
+// Kotlin I/O implementation on its compile classpath so kotlin.io.path symbols
+// (filePermissions, user, read, write) are available during compilation.
+// This is a best-effort, build-time injection that is safe & reversible.
+// NOTE: add the dependency **before** project evaluation so it participates in
+// dependency resolution (previous approach used afterEvaluate which was too late).
+gradle.projectsLoaded {
+  gradle ->
+    gradle.rootProject?.allprojects?.each { p ->
+      if (p.name == 'gradle' || p.path == ':gradle') {
+        // Try to add the dependency immediately so it is present during configuration
+        try {
+          if (p.configurations.findByName('implementation') != null) {
+            p.dependencies.add('implementation', 'org.jetbrains.kotlin:kotlin-util-io:1.9.20')
+            println "init.d: pre-config added kotlin-util-io:1.9.20 to ${p.path} implementation"
+          } else if (p.configurations.findByName('compileOnly') != null) {
+            p.dependencies.add('compileOnly', 'org.jetbrains.kotlin:kotlin-util-io:1.9.20')
+            println "init.d: pre-config added kotlin-util-io:1.9.20 to ${p.path} compileOnly"
+          } else if (p.configurations.findByName('api') != null) {
+            p.dependencies.add('api', 'org.jetbrains.kotlin:kotlin-util-io:1.9.20')
+            println "init.d: pre-config added kotlin-util-io:1.9.20 to ${p.path} api"
+          } else {
+            println "init.d: pre-config could not find suitable configuration on ${p.path}"
+          }
+        } catch (Exception e) {
+          println "init.d: warning - pre-config injection failed for ${p.path}: ${e.message}"
+        }
+
+        // Keep a defensive afterEvaluate fallback (should not be needed anymore).
+        p.afterEvaluate {
+          try {
+            if (p.configurations.findByName('implementation') != null) {
+              p.dependencies.add('implementation', 'org.jetbrains.kotlin:kotlin-util-io:1.9.20')
+              println "init.d: post-config added kotlin-util-io:1.9.20 to ${p.path} implementation"
+            } else if (p.configurations.findByName('compileOnly') != null) {
+              p.dependencies.add('compileOnly', 'org.jetbrains.kotlin:kotlin-util-io:1.9.20')
+              println "init.d: post-config added kotlin-util-io:1.9.20 to ${p.path} compileOnly"
+            } else if (p.configurations.findByName('api') != null) {
+              p.dependencies.add('api', 'org.jetbrains.kotlin:kotlin-util-io:1.9.20')
+              println "init.d: post-config added kotlin-util-io:1.9.20 to ${p.path} api"
+            }
+          } catch (Exception e) {
+            println "init.d: warning - post-config injection failed for ${p.path}: ${e.message}"
+          }
+        }
+      }
+    }
+}

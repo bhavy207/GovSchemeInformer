@@ -1,0 +1,343 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:govunity_connect/screens/state/agricultureLinkstate.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter/cupertino.dart';
+
+import '../../../controller/language_controller.dart';
+import '../../../controller/ttsController.dart';
+import '../../../modal/schemeModal.dart';
+
+class AgricultureStatePage extends StatefulWidget {
+  const AgricultureStatePage({super.key});
+
+  @override
+  State<AgricultureStatePage> createState() => _AgricultureStatePageState();
+}
+
+class _AgricultureStatePageState extends State<AgricultureStatePage> {
+  @override
+  Widget build(BuildContext context) {
+    List<schemeModal> sdata1Schemes =
+        masterList.where((scheme) => sdata.contains(scheme)).toList();
+    return Consumer<LanguageController>(builder: (context, pro, child) {
+      return Scaffold(
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+            iconTheme: const IconThemeData(
+              color: Colors.white,
+            ),
+            backgroundColor: Colors.blue,
+            title: Text(
+              pro.isGujarati
+                  ? 'ખેતી વાડી (કૃષિ)'
+                  : pro.isHindi
+                      ? 'कृषि'
+                      : 'Agriculture',
+              style: GoogleFonts.raleway(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            )),
+        body: ListView.builder(
+          itemCount: sdata1Schemes.length,
+          itemBuilder: (BuildContext context, int index) {
+            return ListTile(
+              leading: Text(
+                (index + 1).toString(),
+                style: GoogleFonts.raleway(
+                    fontWeight: FontWeight.bold, fontSize: 18),
+              ),
+              title: Card(
+                color: const Color(0xF6F5FAFF),
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Text(
+                    pro.isGujarati
+                        ? sdata1Schemes[index].titleG
+                        : pro.isHindi
+                            ? sdata1Schemes[index].titleH
+                            : sdata1Schemes[index].title,
+                    style: GoogleFonts.raleway(
+                        fontWeight: FontWeight.bold, fontSize: 19),
+                  ),
+                ),
+              ),
+              trailing: IconButton(
+                onPressed: () {
+                  setState(() {
+                    sdata1Schemes[index].isFavorited =
+                        !sdata1Schemes[index].isFavorited;
+                  });
+                },
+                icon: Icon(
+                  sdata1Schemes[index].isFavorited
+                      ? CupertinoIcons.heart_fill
+                      : CupertinoIcons.heart,
+                  color: Colors.red,
+                ),
+              ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        AgricultureDetailPage(sdata1Schemes[index]),
+                  ),
+                );
+              },
+            );
+          },
+        ),
+        floatingActionButton: Align(
+          alignment: Alignment.bottomRight,
+          child: FloatingActionButton.extended(
+            backgroundColor: const Color(
+              0xF6F5FAFF,
+            ),
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) {
+                    return const AgricultureLinkState();
+                  },
+                ),
+              );
+            },
+            label: Text(
+              pro.isGujarati ? 'લિંક કરો' : 'Link',
+              style: GoogleFonts.raleway(
+                  fontWeight: FontWeight.bold, fontSize: 19),
+            ),
+            icon: const Icon(CupertinoIcons.link),
+          ),
+        ),
+      );
+    });
+  }
+}
+
+class AgricultureDetailPage extends StatefulWidget {
+  final schemeModal scheme;
+
+  const AgricultureDetailPage(this.scheme, {super.key});
+
+  @override
+  State<AgricultureDetailPage> createState() => _AgricultureDetailPageState();
+}
+
+class _AgricultureDetailPageState extends State<AgricultureDetailPage> {
+  TTsController tTsController = Get.put(TTsController());
+  TTsGController tTsgController = Get.put(TTsGController());
+  TTsHController tTshController = Get.put(TTsHController());
+
+  @override
+  void dispose() {
+    tTsController.stop();
+    // TODO: implement dispose
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+
+    return Consumer<LanguageController>(builder: (context, pro, child) {
+      return Scaffold(
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          iconTheme: const IconThemeData(
+            color: Colors.white,
+          ),
+          backgroundColor: Colors.blue,
+          title: Text(
+            pro.isGujarati
+                ? widget.scheme.titleG
+                : pro.isHindi
+                    ? widget.scheme.titleH
+                    : widget.scheme.title,
+            style: GoogleFonts.raleway(
+              color: Colors.white,
+              fontSize: 19,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.all(
+              size.width * 0.05,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  pro.isGujarati
+                      ? "વર્ણન : "
+                      : pro.isHindi
+                          ? "विवरण:"
+                          : "Desc ription:",
+                  style: GoogleFonts.raleway(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(
+                      8.0,
+                    ),
+                    child: Text(
+                      pro.isGujarati
+                          ? widget.scheme.descriptionG
+                          : pro.isHindi
+                              ? widget.scheme.descriptionH
+                              : widget.scheme.description,
+                      style: GoogleFonts.raleway(
+                        fontSize: 17,
+                      ),
+                    ),
+                  ),
+                ),
+                Row(
+                  children: [
+                    pro.isGujarati
+                        ? const Text(
+                            'વર્ણન સાંભળવા માટે:',
+                          )
+                        : pro.isHindi
+                            ? const Text(
+                                'विवरण सुनने के लिए:',
+                              )
+                            : const Text(
+                                'To Listen Description:',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 16),
+                              ),
+                    const SizedBox(
+                      width: 20,
+                    ),
+                    Card(
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          IconButton(
+                              alignment: Alignment.bottomRight,
+                              onPressed: () {
+                                pro.isGujarati
+                                    ? tTsgController.speak(
+                                        text: widget.scheme.descriptionG)
+                                    : pro.isHindi
+                                        ? tTshController.speak(
+                                            text: widget.scheme.descriptionH)
+                                        : tTsController.speak(
+                                            text: widget.scheme.description);
+                              },
+                              icon: const Icon(
+                                CupertinoIcons.play_arrow_solid,
+                                size: 25,
+                              )),
+                          IconButton(
+                            alignment: Alignment.bottomRight,
+                            onPressed: () {
+                              tTsController.stop();
+                            },
+                            tooltip: 'pause',
+                            icon: const Icon(
+                              CupertinoIcons.pause_fill,
+                              size: 25,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  pro.isGujarati
+                      ? "પુરાવો :"
+                      : pro.isHindi
+                          ? "दस्तावेज :"
+                          : "Document:",
+                  style: GoogleFonts.raleway(
+                      fontWeight: FontWeight.bold, fontSize: 20),
+                ),
+                const SizedBox(height: 10),
+                Card(
+                    child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    pro.isGujarati
+                        ? widget.scheme.documentG
+                        : pro.isHindi
+                            ? widget.scheme.documentH
+                            : widget.scheme.document,
+                    style: GoogleFonts.raleway(fontSize: 17),
+                  ),
+                )),
+                Row(
+                  children: [
+                    pro.isGujarati
+                        ? const Text('પુરાવો સાંભળવા માટે:')
+                        : pro.isHindi
+                            ? const Text('दस्तावेज सुनने के लिए:')
+                            : const Text(
+                                'To Listen Documentation:',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 16),
+                              ),
+                    const SizedBox(
+                      width: 20,
+                    ),
+                    Card(
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          IconButton(
+                              alignment: Alignment.bottomRight,
+                              onPressed: () {
+                                pro.isGujarati
+                                    ? tTsgController.speak(
+                                        text: widget.scheme.documentG)
+                                    : pro.isHindi
+                                        ? tTshController.speak(
+                                            text: widget.scheme.documentH)
+                                        : tTsController.speak(
+                                            text: widget.scheme.document);
+                              },
+                              icon: const Icon(
+                                CupertinoIcons.play_arrow_solid,
+                                size: 25,
+                              )),
+                          IconButton(
+                              alignment: Alignment.bottomRight,
+                              onPressed: () {
+                                tTsController.stop();
+                              },
+                              tooltip: 'pause',
+                              icon: const Icon(
+                                CupertinoIcons.pause_fill,
+                                size: 25,
+                              )),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    });
+  }
+}

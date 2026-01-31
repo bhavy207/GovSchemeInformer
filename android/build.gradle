@@ -1,0 +1,55 @@
+buildscript {
+    // Aligned Kotlin to 1.9.20 so the project's Gradle/tooling matches the
+    // init.d constraints and Flutter 3.38.8 on developer machines (safe).
+    // Reversible — revert to a newer Kotlin only after validating toolchains.
+    ext.kotlin_version = '1.9.20'
+    repositories {
+        google()
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:8.6.0'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+
+    // Force a consistent Kotlin runtime/compiler across the project and any
+    // included builds (Flutter tooling). This prevents older transitive
+    // kotlin-stdlib artifacts from being used which can break newer AGP/tooling.
+    configurations.all {
+        resolutionStrategy {
+            // Prefer the declared kotlin plugin version
+            eachDependency { details ->
+                if (details.requested.group == 'org.jetbrains.kotlin') {
+                    details.useVersion(project.findProperty('kotlin.version') ?: "$kotlin_version")
+                }
+            }
+            // Force common kotlin stdlib/artifacts to the desired version
+            force 'org.jetbrains.kotlin:kotlin-stdlib:1.9.20',
+                  'org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.20',
+                  'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.20',
+                  'org.jetbrains.kotlin:kotlin-reflect:1.9.20',
+                  'org.jetbrains.kotlin:kotlin-compiler-embeddable:1.9.20',
+                  'org.jetbrains.kotlin:kotlin-util-io:1.9.20'
+        }
+    }
+}
+
+rootProject.buildDir = '../build'
+subprojects {
+    project.buildDir = "${rootProject.buildDir}/${project.name}"
+}
+subprojects {
+    project.evaluationDependsOn(':app')
+}
+
+tasks.register("clean", Delete) {
+    delete rootProject.buildDir
+}

@@ -1,0 +1,36 @@
+pluginManagement {
+    def flutterSdkPath = {
+        def properties = new Properties()
+        file("local.properties").withInputStream { properties.load(it) }
+        def flutterSdkPath = properties.getProperty("flutter.sdk")
+        assert flutterSdkPath != null, "flutter.sdk not set in local.properties"
+        return flutterSdkPath
+    }
+    settings.ext.flutterSdkPath = flutterSdkPath()
+
+    // Ensure included builds (Flutter tooling) use a Kotlin plugin version that
+    // exposes the kotlin.io.path / file APIs required by the Flutter Gradle plugin.
+    // This forces consistency between the project and the included build.
+    resolutionStrategy {
+        eachPlugin {
+            if (requested.id.id == 'org.jetbrains.kotlin.jvm' || requested.id.id == 'org.jetbrains.kotlin.kapt') {
+                useVersion('1.9.20')
+            }
+        }
+    }
+
+    includeBuild("${settings.ext.flutterSdkPath}/packages/flutter_tools/gradle")
+
+    plugins {
+        id "dev.flutter.flutter-gradle-plugin" version "1.0.0" apply false
+    }
+}
+
+include ":app"
+
+// The older projects applied Flutter's app_plugin_loader imperatively which is no
+// longer supported (causes: "You are applying Flutter's app_plugin_loader Gradle
+// plugin imperatively..."). The Flutter Gradle plugin is applied declaratively
+// in module `build.gradle` via the `plugins { id "dev.flutter.flutter-gradle-plugin" }` block.
+// If you need to re-enable the old behaviour temporarily, uncomment the line below.
+// apply from: "${settings.ext.flutterSdkPath}/packages/flutter_tools/gradle/app_plugin_loader.gradle"
