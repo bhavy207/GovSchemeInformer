@@ -13,8 +13,8 @@ pluginManagement {
     // This forces consistency between the project and the included build.
     resolutionStrategy {
         eachPlugin {
-            if (requested.id.id == 'org.jetbrains.kotlin.jvm' || requested.id.id == 'org.jetbrains.kotlin.kapt') {
-                useVersion('1.9.20')
+            if (requested.id.id == 'org.jetbrains.kotlin.jvm' || requested.id.id == 'org.jetbrains.kotlin.kapt' || requested.id.id == 'org.jetbrains.kotlin.android') {
+                useVersion('2.1.0')
             }
         }
     }
@@ -23,8 +23,10 @@ pluginManagement {
 
     plugins {
         id "dev.flutter.flutter-gradle-plugin" version "1.0.0" apply false
+        id "com.android.application" version "8.6.0" apply false // Match top-level AGP (keep aligned)
+        id "org.jetbrains.kotlin.android" version "2.1.0" apply false // Kotlin plugin pinned to 2.1.0
     }
-}
+} 
 
 include ":app"
 

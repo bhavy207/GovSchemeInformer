@@ -6,19 +6,19 @@ allprojects {
   configurations.all {
     // Force all relevant Kotlin artifacts to a single, up-to-date version.
     resolutionStrategy.force(
-      'org.jetbrains.kotlin:kotlin-stdlib:1.9.20',
-      'org.jetbrains.kotlin:kotlin-stdlib-common:1.9.20',
-      'org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.20',
-      'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.20',
-      'org.jetbrains.kotlin:kotlin-reflect:1.9.20',
-      'org.jetbrains.kotlin:kotlin-compiler-embeddable:1.9.20',
-      'org.jetbrains.kotlin:kotlin-util-io:1.9.20'
+      'org.jetbrains.kotlin:kotlin-stdlib:2.1.0',
+      'org.jetbrains.kotlin:kotlin-stdlib-common:2.1.0',
+      'org.jetbrains.kotlin:kotlin-stdlib-jdk7:2.1.0',
+      'org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.1.0',
+      'org.jetbrains.kotlin:kotlin-reflect:2.1.0',
+      'org.jetbrains.kotlin:kotlin-compiler-embeddable:2.1.0',
+      'org.jetbrains.kotlin:kotlin-util-io:2.1.0'
     )
 
     // As an extra guard, prefer the newest module if a transitive brings an older one.
     resolutionStrategy.eachDependency { details ->
       if (details.requested.group == 'org.jetbrains.kotlin') {
-        details.useVersion '1.9.20'
+        details.useVersion '2.0.21'
         details.because 'Align Kotlin artifacts so kotlin.io.path APIs are available to included builds'
       }
     }
@@ -30,7 +30,7 @@ allprojects {
 gradle.settingsEvaluated { settings ->
   settings.pluginManagement.resolutionStrategy.eachPlugin { details ->
     if (details.requested.id.id.startsWith('org.jetbrains.kotlin')) {
-      details.useVersion('1.9.20')
+      details.useVersion('2.0.21')
     }
   }
 }
@@ -48,14 +48,14 @@ gradle.projectsLoaded {
         // Try to add the dependency immediately so it is present during configuration
         try {
           if (p.configurations.findByName('implementation') != null) {
-            p.dependencies.add('implementation', 'org.jetbrains.kotlin:kotlin-util-io:1.9.20')
-            println "init.d: pre-config added kotlin-util-io:1.9.20 to ${p.path} implementation"
+            p.dependencies.add('implementation', 'org.jetbrains.kotlin:kotlin-util-io:2.1.0')
+            println "init.d: pre-config added kotlin-util-io:2.1.0 to ${p.path} implementation"
           } else if (p.configurations.findByName('compileOnly') != null) {
-            p.dependencies.add('compileOnly', 'org.jetbrains.kotlin:kotlin-util-io:1.9.20')
-            println "init.d: pre-config added kotlin-util-io:1.9.20 to ${p.path} compileOnly"
+            p.dependencies.add('compileOnly', 'org.jetbrains.kotlin:kotlin-util-io:2.1.0')
+            println "init.d: pre-config added kotlin-util-io:2.1.0 to ${p.path} compileOnly"
           } else if (p.configurations.findByName('api') != null) {
-            p.dependencies.add('api', 'org.jetbrains.kotlin:kotlin-util-io:1.9.20')
-            println "init.d: pre-config added kotlin-util-io:1.9.20 to ${p.path} api"
+            p.dependencies.add('api', 'org.jetbrains.kotlin:kotlin-util-io:2.1.0')
+            println "init.d: pre-config added kotlin-util-io:2.1.0 to ${p.path} api"
           } else {
             println "init.d: pre-config could not find suitable configuration on ${p.path}"
           }
@@ -67,14 +67,14 @@ gradle.projectsLoaded {
         p.afterEvaluate {
           try {
             if (p.configurations.findByName('implementation') != null) {
-              p.dependencies.add('implementation', 'org.jetbrains.kotlin:kotlin-util-io:1.9.20')
-              println "init.d: post-config added kotlin-util-io:1.9.20 to ${p.path} implementation"
+              p.dependencies.add('implementation', 'org.jetbrains.kotlin:kotlin-util-io:2.1.0')
+              println "init.d: post-config added kotlin-util-io:2.1.0 to ${p.path} implementation"
             } else if (p.configurations.findByName('compileOnly') != null) {
-              p.dependencies.add('compileOnly', 'org.jetbrains.kotlin:kotlin-util-io:1.9.20')
-              println "init.d: post-config added kotlin-util-io:1.9.20 to ${p.path} compileOnly"
+              p.dependencies.add('compileOnly', 'org.jetbrains.kotlin:kotlin-util-io:2.1.0')
+              println "init.d: post-config added kotlin-util-io:2.1.0 to ${p.path} compileOnly"
             } else if (p.configurations.findByName('api') != null) {
-              p.dependencies.add('api', 'org.jetbrains.kotlin:kotlin-util-io:1.9.20')
-              println "init.d: post-config added kotlin-util-io:1.9.20 to ${p.path} api"
+              p.dependencies.add('api', 'org.jetbrains.kotlin:kotlin-util-io:2.1.0')
+              println "init.d: post-config added kotlin-util-io:2.1.0 to ${p.path} api"
             }
           } catch (Exception e) {
             println "init.d: warning - post-config injection failed for ${p.path}: ${e.message}"

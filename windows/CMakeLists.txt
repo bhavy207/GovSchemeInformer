@@ -10,6 +10,20 @@ set(BINARY_NAME "govunity_connect")
 # versions of CMake.
 cmake_policy(VERSION 3.14...3.25)
 
+# Provide a repository-local fallback for nuget.exe so CI/local builds can
+# succeed even when system-wide NuGet is not installed. Plugins may look for
+# `nuget.exe` and fail the configure step otherwise — this will let CMake
+# prefer a bundled copy at `windows/tools/nuget.exe` if present.
+if(NOT DEFINED NUGET_EXE)
+  find_program(NUGET_EXE nuget.exe)
+  if(NOT NUGET_EXE)
+    set(LOCAL_NUGET "${CMAKE_SOURCE_DIR}/windows/tools/nuget.exe")
+    if(EXISTS ${LOCAL_NUGET})
+      set(NUGET_EXE ${LOCAL_NUGET})
+    endif()
+  endif()
+endif()
+
 # Define build configuration option.
 get_property(IS_MULTICONFIG GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
 if(IS_MULTICONFIG)

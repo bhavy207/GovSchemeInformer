@@ -27,10 +27,7 @@ class DefaultFirebaseOptions {
       case TargetPlatform.macOS:
         return macos;
       case TargetPlatform.windows:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for windows - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return windows;
       case TargetPlatform.linux:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for linux - '
@@ -44,38 +41,49 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyDGBL2m0VYGvC4REWWMg4p6k1sCESGfmZ8',
-    appId: '1:955563430703:web:0120b01d9da6d9abcd47da',
-    messagingSenderId: '955563430703',
-    projectId: 'govunityconnect',
-    authDomain: 'govunityconnect.firebaseapp.com',
-    storageBucket: 'govunityconnect.appspot.com',
-    measurementId: 'G-L1X2P6HE6H',
+    apiKey: 'AIzaSyCptacwGj0c8JRFMrVxbosy-8Rw8tcFCoY',
+    appId: '1:433084712854:web:39ddf5adf0dd2965f9bfb7',
+    messagingSenderId: '433084712854',
+    projectId: 'govschemeinformer',
+    authDomain: 'govschemeinformer.firebaseapp.com',
+    storageBucket: 'govschemeinformer.firebasestorage.app',
+    measurementId: 'G-MFHH6W6MFM',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDRE70KIDi6eXxwQ-bGQtg5LDdtoUUQjDE',
-    appId: '1:955563430703:android:5526a547012c9ad3cd47da',
-    messagingSenderId: '955563430703',
-    projectId: 'govunityconnect',
-    storageBucket: 'govunityconnect.appspot.com',
+    apiKey: 'AIzaSyBNkJajIClIsRtw_E0hisHFfs0snVU2mzc',
+    appId: '1:433084712854:android:58a0bf6a98cb7a82f9bfb7',
+    messagingSenderId: '433084712854',
+    projectId: 'govschemeinformer',
+    storageBucket: 'govschemeinformer.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyCHvHxs-AQlXzoO5NIjvhrBd_IS-f1_UoU',
-    appId: '1:955563430703:ios:b2ca70d1500ec643cd47da',
-    messagingSenderId: '955563430703',
-    projectId: 'govunityconnect',
-    storageBucket: 'govunityconnect.appspot.com',
+    apiKey: 'AIzaSyAhqneSz1c0EX2u8Xa70CC3O_O-9oW2U_Y',
+    appId: '1:433084712854:ios:72a9d93bc7bbcbddf9bfb7',
+    messagingSenderId: '433084712854',
+    projectId: 'govschemeinformer',
+    storageBucket: 'govschemeinformer.firebasestorage.app',
     iosBundleId: 'com.example.govunityConnect',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyCHvHxs-AQlXzoO5NIjvhrBd_IS-f1_UoU',
-    appId: '1:955563430703:ios:09c088c2f88e3e96cd47da',
-    messagingSenderId: '955563430703',
-    projectId: 'govunityconnect',
-    storageBucket: 'govunityconnect.appspot.com',
-    iosBundleId: 'com.example.govunityConnect.RunnerTests',
+    apiKey: 'AIzaSyAhqneSz1c0EX2u8Xa70CC3O_O-9oW2U_Y',
+    appId: '1:433084712854:ios:72a9d93bc7bbcbddf9bfb7',
+    messagingSenderId: '433084712854',
+    projectId: 'govschemeinformer',
+    storageBucket: 'govschemeinformer.firebasestorage.app',
+    iosBundleId: 'com.example.govunityConnect',
   );
+
+  static const FirebaseOptions windows = FirebaseOptions(
+    apiKey: 'AIzaSyCptacwGj0c8JRFMrVxbosy-8Rw8tcFCoY',
+    appId: '1:433084712854:web:36a319eb215bc87af9bfb7',
+    messagingSenderId: '433084712854',
+    projectId: 'govschemeinformer',
+    authDomain: 'govschemeinformer.firebaseapp.com',
+    storageBucket: 'govschemeinformer.firebasestorage.app',
+    measurementId: 'G-2PV2FE0386',
+  );
+
 }

@@ -14,7 +14,7 @@ import 'loginPage.dart';
 import 'national/listOfscheme.dart';
 
 class AllSchemePage extends StatefulWidget {
-  const AllSchemePage({Key? key}) : super(key: key);
+  const AllSchemePage({super.key});
 
   @override
   State<AllSchemePage> createState() => _AllSchemePageState();
@@ -46,45 +46,48 @@ class _AllSchemePageState extends State<AllSchemePage>
     super.dispose();
   }
 
-  _onWillPop() => showDialog<dynamic>(
-        context: context,
-        builder: (c) => AlertDialog(
-          title: Text(
-            'Do you really want to exit?',
-            style:
-                GoogleFonts.raleway(fontWeight: FontWeight.bold, fontSize: 20),
-          ),
-          actions: [
-            ElevatedButton(
-              style: ButtonStyle(
-                backgroundColor: WidgetStateProperty.all(
-                  const Color(0xFF6C5586),
-                ),
-              ),
-              child: Text(
-                'Exit',
-                style: GoogleFonts.raleway(color: Colors.white),
-              ),
-              onPressed: () => SystemNavigator.pop(),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            ElevatedButton(
-              style: ButtonStyle(
-                backgroundColor: WidgetStateProperty.all(
-                  const Color(0xFF81689D),
-                ),
-              ),
-              child: Text(
-                'Resume App',
-                style: GoogleFonts.raleway(color: Colors.white),
-              ),
-              onPressed: () => Navigator.pop(c, false),
-            ),
-          ],
+  Future<bool> _onWillPop() async {
+    final result = await showDialog<bool>(
+      context: context,
+      builder: (c) => AlertDialog(
+        title: Text(
+          'Do you really want to exit?',
+          style:
+              GoogleFonts.raleway(fontWeight: FontWeight.bold, fontSize: 20),
         ),
-      );
+        actions: [
+          ElevatedButton(
+            style: ButtonStyle(
+              backgroundColor: WidgetStateProperty.all(
+                const Color(0xFF6C5586),
+              ),
+            ),
+            child: Text(
+              'Exit',
+              style: GoogleFonts.raleway(color: Colors.white),
+            ),
+            onPressed: () => SystemNavigator.pop(),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          ElevatedButton(
+            style: ButtonStyle(
+              backgroundColor: WidgetStateProperty.all(
+                const Color(0xFF81689D),
+              ),
+            ),
+            child: Text(
+              'Resume App',
+              style: GoogleFonts.raleway(color: Colors.white),
+            ),
+            onPressed: () => Navigator.pop(c, false),
+          ),
+        ],
+      ),
+    );
+    return result ?? false;
+  }
   User? user = FirebaseAuthHelper.firebaseAuthHelper.firebaseAuth.currentUser;
   final List<bool> _selectedLanguages = [
     true,
@@ -97,7 +100,7 @@ class _AllSchemePageState extends State<AllSchemePage>
     var scaffoldKey = GlobalKey<ScaffoldState>();
     bool vertical = false;
     return WillPopScope(
-      onWillPop: () => _onWillPop(),
+      onWillPop: _onWillPop,
       child: Consumer<LanguageController>(
         builder: (context, pro, child) {
           return Scaffold(

@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "955563430703",
-    "project_id": "govunityconnect",
-    "storage_bucket": "govunityconnect.appspot.com"
+    "project_number": "433084712854",
+    "project_id": "govschemeinformer",
+    "storage_bucket": "govschemeinformer.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:955563430703:android:5526a547012c9ad3cd47da",
+        "mobilesdk_app_id": "1:433084712854:android:58a0bf6a98cb7a82f9bfb7",
         "android_client_info": {
           "package_name": "com.example.govunity_connect"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDRE70KIDi6eXxwQ-bGQtg5LDdtoUUQjDE"
+          "current_key": "AIzaSyBNkJajIClIsRtw_E0hisHFfs0snVU2mzc"
         }
       ],
       "services": {

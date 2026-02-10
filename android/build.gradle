@@ -1,14 +1,17 @@
 buildscript {
-    // Aligned Kotlin to 1.9.20 so the project's Gradle/tooling matches the
-    // init.d constraints and Flutter 3.38.8 on developer machines (safe).
-    // Reversible — revert to a newer Kotlin only after validating toolchains.
-    ext.kotlin_version = '1.9.20'
+    // Aligned Kotlin to 2.1.0 so the project's Gradle/tooling matches the
+    // init.d constraints and current Flutter tooling on developer machines (safe).
+    // Reversible — revert to a different Kotlin only after validating toolchains.
+    ext.kotlin_version = '2.1.0'
     repositories {
         google()
         mavenCentral()
     }
 
     dependencies {
+        // START: FlutterFire Configuration
+        classpath 'com.google.gms:google-services:4.3.15'
+        // END: FlutterFire Configuration
         classpath 'com.android.tools.build:gradle:8.6.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
@@ -32,12 +35,12 @@ allprojects {
                 }
             }
             // Force common kotlin stdlib/artifacts to the desired version
-            force 'org.jetbrains.kotlin:kotlin-stdlib:1.9.20',
-                  'org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.20',
-                  'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.20',
-                  'org.jetbrains.kotlin:kotlin-reflect:1.9.20',
-                  'org.jetbrains.kotlin:kotlin-compiler-embeddable:1.9.20',
-                  'org.jetbrains.kotlin:kotlin-util-io:1.9.20'
+            force 'org.jetbrains.kotlin:kotlin-stdlib:2.1.0',
+                  'org.jetbrains.kotlin:kotlin-stdlib-jdk7:2.1.0',
+                  'org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.1.0',
+                  'org.jetbrains.kotlin:kotlin-reflect:2.1.0',
+                  'org.jetbrains.kotlin:kotlin-compiler-embeddable:2.1.0',
+                  'org.jetbrains.kotlin:kotlin-util-io:2.1.0'
         }
     }
 }
