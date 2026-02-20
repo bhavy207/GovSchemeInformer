@@ -3,6 +3,7 @@
     <application
         android:label="GovUnity Connect"
         android:name="${applicationName}"
+        android:enableOnBackInvokedCallback="true"
         android:icon="@drawable/logo">
         <activity
             android:name=".MainActivity"

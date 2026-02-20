@@ -4,8 +4,8 @@ import 'package:govunity_connect/config/theme.dart';
 import 'package:govunity_connect/utils/rotesUtil.dart';
 import 'package:govunity_connect/screens/allSchemePage.dart';
 import 'package:govunity_connect/screens/detailSchemepage.dart';
-import 'package:govunity_connect/screens/homePage.dart';
-import 'package:govunity_connect/screens/login/login_page.dart';
+import 'package:govunity_connect/views/screens/home_page.dart';
+import 'package:govunity_connect/views/screens/login_page.dart';
 import 'package:govunity_connect/screens/national/agricultureLink.dart';
 import 'package:govunity_connect/screens/national/educationLink.dart';
 import 'package:govunity_connect/screens/national/educationPage.dart';
@@ -20,6 +20,8 @@ import 'package:provider/provider.dart';
 import 'controller/language_controller.dart';
 import 'firebase_options.dart';
 import 'modal/schemeModal.dart';
+
+import 'package:get/get.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -57,7 +59,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'Flutter Demo',
       theme: AppTheme.theme,
       debugShowCheckedModeBanner: false,

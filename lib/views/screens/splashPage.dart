@@ -5,8 +5,10 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 import '../../utils/rotesUtil.dart';
 
+import 'package:firebase_auth/firebase_auth.dart';
+
 class SplashScreenPage extends StatefulWidget {
-  const SplashScreenPage({Key? key}) : super(key: key);
+  const SplashScreenPage({super.key});
 
   @override
   State<SplashScreenPage> createState() => _SplashScreenPageState();
@@ -14,21 +16,34 @@ class SplashScreenPage extends StatefulWidget {
 
 class _SplashScreenPageState extends State<SplashScreenPage> {
   FlutterLogoStyle myStyle = FlutterLogoStyle.markOnly;
+  Timer? _timer1;
+  Timer? _timer2;
+
+  @override
+  void dispose() {
+    _timer1?.cancel();
+    _timer2?.cancel();
+    super.dispose();
+  }
 
   void changeScreen() {
-    Timer.periodic(const Duration(seconds: 7), (timer) {
-      setState(() {
-        myStyle = FlutterLogoStyle.horizontal;
-      });
+    _timer1 = Timer(const Duration(seconds: 4), () {
+      if (mounted) {
+        setState(() {
+          myStyle = FlutterLogoStyle.horizontal;
+        });
+      }
     });
 
-    Timer.periodic(
-      const Duration(seconds: 8),
-      (tick) {
-        Navigator.of(context).pushReplacementNamed(MyRoutes.loginPage);
-        tick.cancel();
-      },
-    );
+    _timer2 = Timer(const Duration(seconds: 5), () {
+      if (mounted) {
+        if (FirebaseAuth.instance.currentUser != null) {
+          Navigator.of(context).pushReplacementNamed(MyRoutes.allSchemePage);
+        } else {
+          Navigator.of(context).pushReplacementNamed(MyRoutes.loginPage);
+        }
+      }
+    });
   }
 
   @override

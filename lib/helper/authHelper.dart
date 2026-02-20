@@ -20,13 +20,15 @@ class FirebaseAuthHelper {
         password: password,
       );
     } on FirebaseAuthException catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("ERROR: ${e.code.toString()}"),
-          backgroundColor: Colors.redAccent,
-        ),
-      );
-      print(e.code.toString());
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("ERROR: ${e.code.toString()}"),
+            backgroundColor: Colors.redAccent,
+          ),
+        );
+      }
+      log(e.code.toString());
     }
 
     if (userCredential != null) {
@@ -37,18 +39,19 @@ class FirebaseAuthHelper {
 
   Future<User?> userSigIn({required String email, required String password, required BuildContext context}) async {
     UserCredential? userCredential;
-    print(email);
-    print(password);
+    log("Sign in attempt for: $email");
     try {
       userCredential = await firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
     } on FirebaseAuthException catch (e) {
-      print(e.code.toString());
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("ERROR: ${e.code.toString()}"),
-          backgroundColor: Colors.redAccent,
-        ),
-      );
+      log(e.code.toString());
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("ERROR: ${e.code.toString()}"),
+            backgroundColor: Colors.redAccent,
+          ),
+        );
+      }
     }
 
     if (userCredential != null) {
@@ -72,17 +75,37 @@ class FirebaseAuthHelper {
       userCredential = await firebaseAuth.signInWithCredential(credential);
     } on FirebaseAuthException catch (e) {
       log(e.code.toString());
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("ERROR: ${e.code.toString()}"),
-          backgroundColor: Colors.redAccent,
-        ),
-      );
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("ERROR: ${e.code.toString()}"),
+            backgroundColor: Colors.redAccent,
+          ),
+        );
+      }
     }
     if (userCredential != null) {
       return userCredential.user;
     }
     return null;
+  }
+
+  Future<User?> userAnonymousSignIn({required BuildContext context}) async {
+    try {
+      UserCredential userCredential = await firebaseAuth.signInAnonymously();
+      return userCredential.user;
+    } on FirebaseAuthException catch (e) {
+      log(e.code.toString());
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("ERROR: ${e.code.toString()}"),
+            backgroundColor: Colors.redAccent,
+          ),
+        );
+      }
+      return null;
+    }
   }
 
   Future<void> logOutUser() async {

@@ -10,7 +10,7 @@ import 'package:govunity_connect/controller/language_controller.dart';
 import 'package:showcaseview/showcaseview.dart';
 import 'package:govunity_connect/services/auth_service.dart';
 import 'favouritePage.dart';
-import 'loginPage.dart';
+import 'login_page.dart';
 import 'national/listOfscheme.dart';
 
 class AllSchemePage extends StatefulWidget {
@@ -99,8 +99,12 @@ class _AllSchemePageState extends State<AllSchemePage>
   Widget build(BuildContext context) {
     var scaffoldKey = GlobalKey<ScaffoldState>();
     bool vertical = false;
-    return WillPopScope(
-      onWillPop: _onWillPop,
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (didPop) {
+        if (didPop) return;
+        _onWillPop();
+      },
       child: Consumer<LanguageController>(
         builder: (context, pro, child) {
           return Scaffold(
@@ -282,7 +286,7 @@ class _AllSchemePageState extends State<AllSchemePage>
                     children: [
                       UserAccountsDrawerHeader(
                         decoration: BoxDecoration(
-                            color: Colors.blue.shade200.withOpacity(0.1),
+                            color: Colors.blue.shade200.withValues(alpha: 0.1),
                             boxShadow: const [
                               BoxShadow(
                                   color: Colors.white54,

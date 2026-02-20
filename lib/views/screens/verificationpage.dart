@@ -19,7 +19,7 @@ class VerificationPage extends StatelessWidget {
         Get.snackbar('Error', 'Invalid verification code');
       }
     } catch (e) {
-      print(e.toString());
+      Get.log(e.toString());
       Get.snackbar('Error', e.toString());
     }
   }
@@ -70,7 +70,7 @@ class VerificationPage extends StatelessWidget {
                       validator: (val) => (val == "") ? "Enter verification code" : null,
                       decoration: InputDecoration(
                         filled: true,
-                        fillColor: Colors.blue.withOpacity(0.05),
+                        fillColor: Colors.blue.withValues(alpha: 0.05),
                         hintText: 'Verification Code',
                         hintStyle: GoogleFonts.raleway(
                             fontSize: 14,
