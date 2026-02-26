@@ -1,12 +1,12 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:govunity_connect/screens/state/walfairLink.dart';
+import 'package:govunity_connect/screens/state/welfare_link.dart';
 import 'package:provider/provider.dart';
 
 import '../../../controller/language_controller.dart';
-import '../../../controller/ttsController.dart';
-import '../../../modal/schemeModal.dart';
+import '../../../controller/tts_controller.dart';
+import '../../../modal/scheme_modal.dart';
 import 'package:flutter/cupertino.dart';
 
 class Wstate extends StatefulWidget {
@@ -19,7 +19,7 @@ class Wstate extends StatefulWidget {
 class _WstateState extends State<Wstate> {
   @override
   Widget build(BuildContext context) {
-    List<schemeModal> data5Schemes =
+    List<SchemeModal> data5Schemes =
         masterList.where((scheme) => sWdata.contains(scheme)).toList();
     return Consumer<LanguageController>(builder: (context, pro, child) {
       return Scaffold(
@@ -119,7 +119,7 @@ class _WstateState extends State<Wstate> {
 }
 
 class AgricultureDetailPage extends StatefulWidget {
-  final schemeModal scheme;
+  final SchemeModal scheme;
 
   const AgricultureDetailPage(this.scheme, {super.key});
 

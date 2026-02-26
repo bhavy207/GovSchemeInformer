@@ -1,4 +1,9 @@
 pluginManagement {
+    repositories {
+        google()            // Required for com.android.application
+        mavenCentral()      // Backup for other plugins
+        gradlePluginPortal()
+    }
     def flutterSdkPath = {
         def properties = new Properties()
         file("local.properties").withInputStream { properties.load(it) }
@@ -20,13 +25,13 @@ pluginManagement {
     }
 
     includeBuild("${settings.ext.flutterSdkPath}/packages/flutter_tools/gradle")
+}
 
-    plugins {
-        id "dev.flutter.flutter-gradle-plugin" version "1.0.0" apply false
-        id "com.android.application" version "8.6.0" apply false // Match top-level AGP (keep aligned)
-        id "org.jetbrains.kotlin.android" version "2.1.0" apply false // Kotlin plugin pinned to 2.1.0
-    }
-} 
+plugins {
+    id "dev.flutter.flutter-plugin-loader" version "1.0.0"
+    id "com.android.application" version "8.9.1" apply false // Match top-level AGP (keep aligned)
+    id "org.jetbrains.kotlin.android" version "2.1.0" apply false // Kotlin plugin pinned to 2.1.0
+}
 
 include ":app"
 

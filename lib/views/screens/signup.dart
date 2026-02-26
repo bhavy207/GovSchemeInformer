@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:govunity_connect/views/screens/login_page.dart';
-import 'package:govunity_connect/helper/authHelper.dart';
+import 'package:govunity_connect/helper/auth_helper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class SignupPage extends StatelessWidget {

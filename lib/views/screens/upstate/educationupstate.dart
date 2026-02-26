@@ -1,13 +1,13 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:govunity_connect/screens/state/educationLinkState.dart';
+import 'package:govunity_connect/screens/state/education_link_state.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/cupertino.dart';
 
 import '../../../controller/language_controller.dart';
-import '../../../controller/ttsController.dart';
-import '../../../modal/schemeModal.dart';
+import '../../../controller/tts_controller.dart';
+import '../../../modal/scheme_modal.dart';
 
 class EducationState extends StatefulWidget {
   const EducationState({super.key});
@@ -19,7 +19,7 @@ class EducationState extends StatefulWidget {
 class _EducationStateState extends State<EducationState> {
   @override
   Widget build(BuildContext context) {
-    List<schemeModal> sEdata2Schemes =
+    List<SchemeModal> sEdata2Schemes =
         masterList.where((scheme) => sEdata.contains(scheme)).toList();
     return Consumer<LanguageController>(builder: (context, pro, child) {
       return Scaffold(
@@ -119,7 +119,7 @@ class _EducationStateState extends State<EducationState> {
 }
 
 class AgricultureDetailPage extends StatefulWidget {
-  final schemeModal scheme;
+  final SchemeModal scheme;
 
   const AgricultureDetailPage(this.scheme, {super.key});
 

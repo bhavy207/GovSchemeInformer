@@ -1,25 +1,25 @@
-import 'package:firebase_core/firebase_core.dart';
+﻿import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:govunity_connect/config/theme.dart';
-import 'package:govunity_connect/utils/rotesUtil.dart';
-import 'package:govunity_connect/screens/allSchemePage.dart';
-import 'package:govunity_connect/screens/detailSchemepage.dart';
+import 'package:govunity_connect/utils/routes_util.dart';
+import 'package:govunity_connect/screens/all_scheme_page.dart';
+import 'package:govunity_connect/screens/detail_scheme_page.dart';
 import 'package:govunity_connect/views/screens/home_page.dart';
 import 'package:govunity_connect/views/screens/login_page.dart';
-import 'package:govunity_connect/screens/national/agricultureLink.dart';
-import 'package:govunity_connect/screens/national/educationLink.dart';
-import 'package:govunity_connect/screens/national/educationPage.dart';
-import 'package:govunity_connect/screens/national/healthPage.dart';
-import 'package:govunity_connect/screens/national/listOfscheme.dart';
-import 'package:govunity_connect/screens/national/ruralPage.dart';
-import 'package:govunity_connect/screens/state/InfraStatePage.dart';
-import 'package:govunity_connect/screens/state/agricultureState.dart';
-import 'package:govunity_connect/screens/state/educationPagestate.dart';
-import 'package:govunity_connect/screens/state/listOfStateScheme.dart';
+import 'package:govunity_connect/screens/national/agriculture_link.dart';
+import 'package:govunity_connect/screens/national/education_link.dart';
+import 'package:govunity_connect/screens/national/education_page.dart';
+import 'package:govunity_connect/screens/national/health_page.dart';
+import 'package:govunity_connect/screens/national/list_of_scheme.dart';
+import 'package:govunity_connect/screens/national/rural_page.dart';
+import 'package:govunity_connect/screens/state/infra_state_page.dart';
+import 'package:govunity_connect/screens/state/agriculture_state.dart';
+import 'package:govunity_connect/screens/state/education_page_state.dart';
+import 'package:govunity_connect/screens/state/list_of_state_scheme.dart';
 import 'package:provider/provider.dart';
 import 'controller/language_controller.dart';
 import 'firebase_options.dart';
-import 'modal/schemeModal.dart';
+import 'modal/scheme_modal.dart';
 
 import 'package:get/get.dart';
 
@@ -32,10 +32,10 @@ void main() async {
   // await Firebase.initializeApp();
 
   masterList.addAll(data);
-  masterList.addAll(Edata);
-  masterList.addAll(Rdata);
-  masterList.addAll(Hdata);
-  masterList.addAll(Idata);
+  masterList.addAll(edata);
+  masterList.addAll(rdata);
+  masterList.addAll(hdata);
+  masterList.addAll(idata);
   masterList.addAll(sdata);
   masterList.addAll(sRdata);
   masterList.addAll(sHdata);
@@ -73,8 +73,8 @@ class MyApp extends StatelessWidget {
         // MyRoutes.loginPage: (context) => LoginPage(),
         MyRoutes.detailSchemePage: (context) => const SchemeListWidget(),
         MyRoutes.listOfScheme: (context) => const ListOfSchemeNational(),
-        MyRoutes.SdetailSchemePage: (context) => SchemeDetailsPage(
-            ModalRoute.of(context)!.settings.arguments as schemeModal),
+        MyRoutes.sdetailSchemePage: (context) => SchemeDetailsPage(
+            ModalRoute.of(context)!.settings.arguments as SchemeModal),
         MyRoutes.agricultureLink: (context) => const AgriculureLink(),
         MyRoutes.educationLink: (context) => const EducationLink(),
         MyRoutes.educationPage: (context) => const EducationPage(),

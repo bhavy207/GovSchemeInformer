@@ -3,10 +3,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class VerificationPage extends StatelessWidget {
-  VerificationPage({super.key});
+class VerificationPage extends StatefulWidget {
+  const VerificationPage({super.key});
 
-  TextEditingController codeController = TextEditingController();
+  @override
+  State<VerificationPage> createState() => _VerificationPageState();
+}
+
+class _VerificationPageState extends State<VerificationPage> {
+  final TextEditingController codeController = TextEditingController();
 
   void verifyCode(String code) async {
     try {
@@ -24,7 +29,7 @@ class VerificationPage extends StatelessWidget {
     }
   }
 
-  GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {

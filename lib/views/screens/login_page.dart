@@ -1,12 +1,12 @@
-import 'dart:convert';
+﻿import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:govunity_connect/controller/language_controller.dart';
-import 'package:govunity_connect/screens/allSchemePage.dart';
-import 'package:govunity_connect/helper/authHelper.dart';
+import 'package:govunity_connect/screens/all_scheme_page.dart';
+import 'package:govunity_connect/helper/auth_helper.dart';
 import 'package:govunity_connect/views/screens/signup.dart';
 
 class LoginPage extends StatefulWidget {

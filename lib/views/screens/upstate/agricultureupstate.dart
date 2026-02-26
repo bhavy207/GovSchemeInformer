@@ -1,13 +1,13 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:govunity_connect/screens/state/agricultureLinkstate.dart';
+import 'package:govunity_connect/screens/state/agriculture_link_state.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/cupertino.dart';
 
 import '../../../controller/language_controller.dart';
-import '../../../controller/ttsController.dart';
-import '../../../modal/schemeModal.dart';
+import '../../../controller/tts_controller.dart';
+import '../../../modal/scheme_modal.dart';
 
 class AgricultureStatePage extends StatefulWidget {
   const AgricultureStatePage({super.key});
@@ -19,7 +19,7 @@ class AgricultureStatePage extends StatefulWidget {
 class _AgricultureStatePageState extends State<AgricultureStatePage> {
   @override
   Widget build(BuildContext context) {
-    List<schemeModal> sdata1Schemes =
+    List<SchemeModal> sdata1Schemes =
         masterList.where((scheme) => sdata.contains(scheme)).toList();
     return Consumer<LanguageController>(builder: (context, pro, child) {
       return Scaffold(
@@ -119,7 +119,7 @@ class _AgricultureStatePageState extends State<AgricultureStatePage> {
 }
 
 class AgricultureDetailPage extends StatefulWidget {
-  final schemeModal scheme;
+  final SchemeModal scheme;
 
   const AgricultureDetailPage(this.scheme, {super.key});
 
