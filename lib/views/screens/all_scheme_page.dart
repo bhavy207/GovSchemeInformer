@@ -283,34 +283,40 @@ class _AllSchemePageState extends State<AllSchemePage>
                 children: [
                   Column(
                     children: [
-                      UserAccountsDrawerHeader(
-                        decoration: BoxDecoration(
-                            color: Colors.blue.shade200.withValues(alpha: 0.1),
-                            boxShadow: const [
-                              BoxShadow(
-                                  color: Colors.white54,
-                                  spreadRadius: 0.5,
-                                  blurRadius: 3,
-                                  offset: Offset(0, 2))
-                            ]),
-                        currentAccountPicture: CircleAvatar(
-                          backgroundImage: NetworkImage(user?.photoURL ??
-                              'https://cdn-icons-png.flaticon.com/512/4123/4123763.png'),
-                        ),
-                        accountName: Text(
-                          user?.displayName ?? 'Anonymous',
-                          style: GoogleFonts.raleway(
-                              color: Colors.black,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        accountEmail: Text(
-                          user?.email ?? 'Logged in As Anonymous',
-                          style: GoogleFonts.raleway(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 14),
-                        ),
+                      StreamBuilder<User?>(
+                        stream: FirebaseAuth.instance.userChanges(),
+                        builder: (context, snapshot) {
+                          final streamUser = snapshot.data ?? user;
+                          return UserAccountsDrawerHeader(
+                            decoration: BoxDecoration(
+                                color: Colors.blue.shade200.withValues(alpha: 0.1),
+                                boxShadow: const [
+                                  BoxShadow(
+                                      color: Colors.white54,
+                                      spreadRadius: 0.5,
+                                      blurRadius: 3,
+                                      offset: Offset(0, 2))
+                                ]),
+                            currentAccountPicture: CircleAvatar(
+                              backgroundImage: NetworkImage(streamUser?.photoURL ??
+                                  'https://cdn-icons-png.flaticon.com/512/4123/4123763.png'),
+                            ),
+                            accountName: Text(
+                              streamUser?.displayName ?? (streamUser?.email != null ? streamUser!.email!.split('@').first : 'Guest User'),
+                              style: GoogleFonts.raleway(
+                                  color: Colors.black,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            accountEmail: Text(
+                              streamUser?.email ?? 'Guest Access',
+                              style: GoogleFonts.raleway(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14),
+                            ),
+                          );
+                        },
                       ),
                     ],
                   ),
@@ -617,7 +623,6 @@ class _AllSchemePageState extends State<AllSchemePage>
                   // const Divider(),
                   ListTile(
                     onTap: () {
-                      FirebaseAuthHelper.firebaseAuthHelper.logOutUser();
                       Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (context) => const Settingpage(),
@@ -638,10 +643,42 @@ class _AllSchemePageState extends State<AllSchemePage>
                   ),
                   ListTile(
                     onTap: () {
-                      FirebaseAuthHelper.firebaseAuthHelper.logOutUser();
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => const LoginPage(),
+                      showDialog(
+                        context: context,
+                        builder: (ctx) => AlertDialog(
+                          title: Text(
+                            pro.isGujarati ? 'લૉગ આઉટ' : pro.isHindi ? 'लॉग आउट' : 'Logout',
+                            style: GoogleFonts.raleway(fontWeight: FontWeight.bold),
+                          ),
+                          content: Text(
+                            pro.isGujarati ? 'શું તમે ખરેખર લૉગ આઉટ કરવા માંગો છો?' : pro.isHindi ? 'क्या आप वाकई लॉग आउट करना चाहते हैं?' : 'Are you sure you want to log out?',
+                            style: GoogleFonts.raleway(),
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.of(ctx).pop(),
+                              child: Text(
+                                pro.isGujarati ? 'ના' : pro.isHindi ? 'नहीं' : 'No',
+                                style: GoogleFonts.raleway(color: Colors.black),
+                              ),
+                            ),
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
+                              onPressed: () {
+                                Navigator.of(ctx).pop();
+                                FirebaseAuthHelper.firebaseAuthHelper.logOutUser();
+                                Navigator.of(context).pushReplacement(
+                                  MaterialPageRoute(
+                                    builder: (context) => const LoginPage(),
+                                  ),
+                                );
+                              },
+                              child: Text(
+                                pro.isGujarati ? 'હા' : pro.isHindi ? 'हाँ' : 'Yes',
+                                style: GoogleFonts.raleway(color: Colors.white),
+                              ),
+                            ),
+                          ],
                         ),
                       );
                     },
