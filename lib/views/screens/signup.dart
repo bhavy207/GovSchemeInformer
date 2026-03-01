@@ -1,20 +1,46 @@
-﻿import 'package:flutter/material.dart';
+﻿import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:govunity_connect/views/screens/login_page.dart';
+import 'package:govunity_connect/screens/all_scheme_page.dart';
 import 'package:govunity_connect/helper/auth_helper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class SignupPage extends StatelessWidget {
-  SignupPage({super.key});
+class SignupPage extends StatefulWidget {
+  const SignupPage({super.key});
 
+  @override
+  State<SignupPage> createState() => _SignupPageState();
+}
+
+class _SignupPageState extends State<SignupPage> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController cpasswordController = TextEditingController();
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-  void signup(BuildContext context, String email, String password,
-      String cpassword) async {
+  Future<void> saveUserData(String email, String displayName) async {
+    final prefs = await SharedPreferences.getInstance();
+    final Map<String, dynamic> userData = {
+      'email': email,
+      'displayName': displayName,
+    };
+    final String userJson = jsonEncode(userData);
+    await prefs.setString('userData', userJson);
+  }
+
+  Future<void> _navigateToAllSchemePage() async {
+    if (!mounted) return;
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const AllSchemePage()),
+    );
+  }
+
+  void signup(BuildContext context, String email, String password, String cpassword) async {
     if (password != cpassword) {
       Get.snackbar('Error', 'Passwords do not match');
       return;
@@ -28,21 +54,21 @@ class SignupPage extends StatelessWidget {
 
       if (user != null) {
         Get.snackbar('Success', 'Account created successfully');
-        if (context.mounted) {
-          // Firebase automatically signs in the user after signup.
-          // Since the user wants to "check implementation", for now we'll 
-          // redirect to home or login. Let's send them to LoginPage to verify.
-          Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) => const LoginPage()),
-          );
-        }
+        await saveUserData(user.email ?? "", user.displayName ?? "User");
+        _navigateToAllSchemePage();
       }
     } catch (e) {
       Get.snackbar('Error', e.toString());
     }
   }
 
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  Future<void> _handleGoogleSignUp() async {
+    User? user = await FirebaseAuthHelper.firebaseAuthHelper.userGoogleSignIn(context: context);
+    if (user != null) {
+      await saveUserData(user.email ?? "", user.displayName ?? "User");
+      _navigateToAllSchemePage();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,12 +86,12 @@ class SignupPage extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    SizedBox(height: size.height * 0.140),
+                    SizedBox(height: size.height * 0.100),
                     Image.asset(
                       'assets/img/logo.png',
-                      height: 150,
+                      height: 120,
                     ),
-                    SizedBox(height: size.height * 0.040),
+                    SizedBox(height: size.height * 0.030),
                     Text(
                       "Gov Unity Connect",
                       style: GoogleFonts.raleway(
@@ -76,7 +102,7 @@ class SignupPage extends StatelessWidget {
                     SizedBox(height: size.height * 0.040),
                     TextFormField(
                       controller: emailController,
-                      validator: (val) => (val == "") ? "Enter email" : null,
+                      validator: (val) => (val == null || val.isEmpty) ? "Enter email" : null,
                       decoration: InputDecoration(
                         filled: true,
                         fillColor: Colors.blue.withValues(alpha: 0.05),
@@ -95,7 +121,7 @@ class SignupPage extends StatelessWidget {
                     TextFormField(
                       obscureText: true,
                       controller: passwordController,
-                      validator: (val) => (val == "") ? "Enter password" : null,
+                      validator: (val) => (val == null || val.isEmpty) ? "Enter password" : null,
                       decoration: InputDecoration(
                         filled: true,
                         fillColor: Colors.blue.withValues(alpha: 0.05),
@@ -115,7 +141,7 @@ class SignupPage extends StatelessWidget {
                       obscureText: true,
                       controller: cpasswordController,
                       validator: (val) =>
-                          (val == "") ? "Enter confirm password" : null,
+                          (val == null || val.isEmpty) ? "Enter confirm password" : null,
                       decoration: InputDecoration(
                         filled: true,
                         fillColor: Colors.blue.withValues(alpha: 0.05),
@@ -130,7 +156,7 @@ class SignupPage extends StatelessWidget {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 30),
                     GestureDetector(
                       onTap: () {
                         if (formKey.currentState!.validate()) {
@@ -149,20 +175,53 @@ class SignupPage extends StatelessWidget {
                         decoration: BoxDecoration(
                             color: Colors.blue,
                             borderRadius: BorderRadius.circular(14)),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              'Sign Up',
-                              style: GoogleFonts.raleway(
-                                  letterSpacing: 2,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                  fontSize: 16),
-                            ),
-                          ],
+                        child: Text(
+                          'Sign Up',
+                          style: GoogleFonts.raleway(
+                              letterSpacing: 2,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                              fontSize: 16),
                         ),
                       ),
+                    ),
+                    const SizedBox(height: 30),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Flexible(
+                          child: InkWell(
+                            onTap: _handleGoogleSignUp,
+                            borderRadius: BorderRadius.circular(14),
+                            child: Container(
+                              height: 50,
+                              width: size.width * 0.60,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(14),
+                                border: Border.all(color: Colors.grey.shade300),
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Image(
+                                    image: AssetImage('assets/img/google.png'),
+                                    height: 24,
+                                  ),
+                                  const SizedBox(width: 12),
+                                  Text(
+                                    'Continue with Google',
+                                    style: GoogleFonts.raleway(
+                                      fontWeight: FontWeight.bold,
+                                      color: const Color(0xFF36455A),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),

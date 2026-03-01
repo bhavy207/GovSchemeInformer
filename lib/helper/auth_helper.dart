@@ -61,33 +61,38 @@ class FirebaseAuthHelper {
   }
 
   Future<User?> userGoogleSignIn({required BuildContext context}) async {
-    GoogleSignInAccount? googleSignInAccount = await googleSignIn.signIn();
-
-    GoogleSignInAuthentication? googleSignInAuthentication = await googleSignInAccount?.authentication;
-
-    OAuthCredential credential = GoogleAuthProvider.credential(
-      accessToken: googleSignInAuthentication?.accessToken,
-      idToken: googleSignInAuthentication?.idToken,
-    );
-    UserCredential? userCredential;
-
     try {
-      userCredential = await firebaseAuth.signInWithCredential(credential);
-    } on FirebaseAuthException catch (e) {
-      log(e.code.toString());
+      GoogleSignInAccount? googleSignInAccount = await googleSignIn.signIn();
+
+      if (googleSignInAccount == null) {
+        return null; // The user canceled the sign-in flow
+      }
+
+      GoogleSignInAuthentication? googleSignInAuthentication = await googleSignInAccount.authentication;
+
+      OAuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleSignInAuthentication.accessToken,
+        idToken: googleSignInAuthentication.idToken,
+      );
+
+      UserCredential userCredential = await firebaseAuth.signInWithCredential(credential);
+      return userCredential.user;
+      
+    } catch (e) {
+      log("Google Sign-In Error: ${e.toString()}");
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text("ERROR: ${e.code.toString()}"),
+            content: Text(
+              "Google Sign In Failed. Please ensure your SHA-1 is added to Firebase.\nDetails: $e",
+            ),
             backgroundColor: Colors.redAccent,
+            duration: const Duration(seconds: 4),
           ),
         );
       }
+      return null;
     }
-    if (userCredential != null) {
-      return userCredential.user;
-    }
-    return null;
   }
 
   Future<User?> userAnonymousSignIn({required BuildContext context}) async {

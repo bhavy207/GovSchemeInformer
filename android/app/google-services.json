@@ -1,18 +1,32 @@
 {
   "project_info": {
     "project_number": "433084712854",
+    "firebase_url": "https://govschemeinformer-default-rtdb.firebaseio.com",
     "project_id": "govschemeinformer",
     "storage_bucket": "govschemeinformer.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:433084712854:android:58a0bf6a98cb7a82f9bfb7",
+        "mobilesdk_app_id": "1:433084712854:android:77bbfbb7133b921cf9bfb7",
         "android_client_info": {
-          "package_name": "com.example.govunity_connect"
+          "package_name": "com.example.gov_schemes_app"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "433084712854-td5mk1bhgvc3v2se48625k3oe03uv1k9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.gov_schemes_app",
+            "certificate_hash": "3785fd73d6693d4d6bd3fa32feeadb0c613c58c2"
+          }
+        },
+        {
+          "client_id": "433084712854-noipapr2ra8sk3hj2o8jmgtor4qfr25s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBNkJajIClIsRtw_E0hisHFfs0snVU2mzc"
@@ -20,7 +34,63 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "433084712854-noipapr2ra8sk3hj2o8jmgtor4qfr25s.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "433084712854-7ooc3kmj6mcek811gu0lfbulj2kqpgls.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.govSchemesApp"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:433084712854:android:58a0bf6a98cb7a82f9bfb7",
+        "android_client_info": {
+          "package_name": "com.example.govunity_connect"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "433084712854-g8ss9re7lrgnghkk6k535760br9voe1v.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.govunity_connect",
+            "certificate_hash": "3785fd73d6693d4d6bd3fa32feeadb0c613c58c2"
+          }
+        },
+        {
+          "client_id": "433084712854-noipapr2ra8sk3hj2o8jmgtor4qfr25s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBNkJajIClIsRtw_E0hisHFfs0snVU2mzc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "433084712854-noipapr2ra8sk3hj2o8jmgtor4qfr25s.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "433084712854-7ooc3kmj6mcek811gu0lfbulj2kqpgls.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.govSchemesApp"
+              }
+            }
+          ]
         }
       }
     }
