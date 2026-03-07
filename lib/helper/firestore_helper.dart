@@ -2,6 +2,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import '../modal/scheme_modal.dart';
 import 'auth_helper.dart';
 
 class FireStoreHelper {
@@ -11,6 +12,49 @@ class FireStoreHelper {
   FirebaseFirestore fireStore = FirebaseFirestore.instance;
 
   String userCollection = "User";
+  String schemesCollection = "Schemes";
+
+  // --- Scheme Management Methods ---
+  
+  Future<void> addScheme({required SchemeModal scheme}) async {
+    try {
+      await fireStore.collection(schemesCollection).add(scheme.toJson());
+      log("Scheme added successfully");
+    } catch (e) {
+      log("Error adding scheme: $e");
+      rethrow;
+    }
+  }
+
+  Stream<List<SchemeModal>> getSchemesStream() {
+    return fireStore.collection(schemesCollection).snapshots().map((snapshot) {
+      return snapshot.docs.map((doc) {
+         return SchemeModal.fromJson(doc.data(), docId: doc.id);
+      }).toList();
+    });
+  }
+
+  Future<void> updateScheme({required String docId, required SchemeModal scheme}) async {
+    try {
+      await fireStore.collection(schemesCollection).doc(docId).update(scheme.toJson());
+      log("Scheme updated successfully");
+    } catch (e) {
+      log("Error updating scheme: $e");
+      rethrow;
+    }
+  }
+
+  Future<void> deleteScheme({required String docId}) async {
+    try {
+      await fireStore.collection(schemesCollection).doc(docId).delete();
+      log("Scheme deleted successfully");
+    } catch (e) {
+      log("Error deleting scheme: $e");
+      rethrow;
+    }
+  }
+
+  // ---------------------------------
 
   Stream<QuerySnapshot<Map<String, dynamic>>> getChats(
       {required String senderId, required String receiverId}) {

@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:govunity_connect/controller/language_controller.dart';
 import 'package:showcaseview/showcaseview.dart';
 import 'package:govunity_connect/services/auth_service.dart';
+import 'package:govunity_connect/screens/admin/admin_dashboard_page.dart' as govunity_connect;
 import 'favourite_page.dart';
 import 'login_page.dart';
 import 'national/list_of_scheme.dart';
@@ -641,6 +642,21 @@ class _AllSchemePageState extends State<AllSchemePage>
                           color: Colors.black, fontSize: 19),
                     ),
                   ),
+                  if (FirebaseAuth.instance.currentUser?.email == 'admin@govunity.com')
+                    ListTile(
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => const govunity_connect.AdminDashboardPage(),
+                          ),
+                        );
+                      },
+                      leading: const Icon(color: Colors.black, Icons.admin_panel_settings),
+                      title: Text(
+                        'Admin Dashboard',
+                        style: GoogleFonts.raleway(color: Colors.black, fontSize: 19),
+                      ),
+                    ),
                   ListTile(
                     onTap: () {
                       showDialog(

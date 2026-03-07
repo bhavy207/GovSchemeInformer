@@ -1,5 +1,8 @@
 class SchemeModal {
   final int id;
+  String? documentId; // New field for Firestore ID
+  String category;    // e.g., 'Agriculture', 'Education'
+  String type;        // 'National' or 'State'
   final String title;
   final String titleG;
   final String titleH;
@@ -17,6 +20,9 @@ class SchemeModal {
 
   SchemeModal({
     required this.id,
+    this.documentId,
+    this.category = 'General',
+    this.type = 'National',
     required this.title,
     required this.description,
     required this.document,
@@ -35,6 +41,9 @@ class SchemeModal {
 
   Map<String, dynamic> toJson() {
     return {
+      'id': id,
+      'category': category,
+      'type': type,
       'title': title,
       'titleG': titleG,
       'titleH': titleH,
@@ -44,6 +53,7 @@ class SchemeModal {
       'document': document,
       'documentG': documentG,
       'documentH': documentH,
+      'link': link,
       'eligibility': eligibility,
       'eligibilityH': eligibilityH,
       'eligibilityG': eligibilityG,
@@ -55,22 +65,26 @@ class SchemeModal {
     isFavorited = !isFavorited;
   }
 
-  factory SchemeModal.fromJson(Map<String, dynamic> json) {
+  factory SchemeModal.fromJson(Map<String, dynamic> json, {String? docId}) {
     return SchemeModal(
-      titleG: json['titleG'],
-      id: json['id'],
+      id: json['id'] ?? 0,
+      documentId: docId,
+      category: json['category'] ?? 'General',
+      type: json['type'] ?? 'National',
       title: json['title'] ?? '',
+      titleG: json['titleG'] ?? '',
+      titleH: json['titleH'] ?? '',
       description: json['description'] ?? '',
-      document: json['document'] ?? '',
-      link: json['link'] ?? '',
       descriptionG: json['descriptionG'] ?? '',
+      descriptionH: json['descriptionH'] ?? '',
+      document: json['document'] ?? '',
       documentG: json['documentG'] ?? '',
-      titleH: json['titleH'],
-      descriptionH: json['descriptionH'],
-      documentH: json['documentH'],
-      eligibility: json['eligibility'],
-      eligibilityG: json['eligibilityG'],
-      eligibilityH: json['eligibilityH'],
+      documentH: json['documentH'] ?? '',
+      link: json['link'] ?? '',
+      eligibility: json['eligibility'] ?? '',
+      eligibilityG: json['eligibilityG'] ?? '',
+      eligibilityH: json['eligibilityH'] ?? '',
+      isFavorited: json['isFavorited'] ?? false,
     );
   }
 }
