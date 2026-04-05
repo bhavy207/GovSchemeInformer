@@ -1,4 +1,4 @@
-﻿import 'package:flutter/cupertino.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:govunity_connect/helper/firestore_helper.dart';
 import 'package:get/get.dart';
@@ -113,7 +113,7 @@ class _AgriculturePageState extends State<AgriculturePage> {
                 },
               );
             },
-          ),
+          );
           },
         ),
           floatingActionButton: Align(

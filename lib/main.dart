@@ -1,4 +1,7 @@
-﻿import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'services/notification_service.dart';
+
 import 'package:flutter/material.dart';
 import 'package:govunity_connect/config/theme.dart';
 import 'package:govunity_connect/utils/routes_util.dart';
@@ -17,17 +20,28 @@ import 'package:govunity_connect/screens/state/agriculture_state.dart';
 import 'package:govunity_connect/screens/state/education_page_state.dart';
 import 'package:govunity_connect/screens/state/list_of_state_scheme.dart';
 import 'package:provider/provider.dart';
+import 'views/screens/analytics_page.dart';
 import 'controller/language_controller.dart';
 import 'firebase_options.dart';
 import 'modal/scheme_modal.dart';
 
 import 'package:get/get.dart';
 
+@pragma('vm:entry-point')
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+  print("Handling a background message: ${message.messageId}");
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  await NotificationService().init();
+
   // WidgetsFlutterBinding.ensureInitialized();
   // await Firebase.initializeApp();
 
@@ -84,6 +98,7 @@ class MyApp extends StatelessWidget {
         MyRoutes.listOfStateScheme: (context) => const ListOfSchemeState(),
         MyRoutes.educationPagestate: (context) => const EducationState(),
         MyRoutes.infraStatePage: (context) => const InfraState(),
+        MyRoutes.analyticsPage: (context) => const AnalyticsPage(),
       },
     );
   }

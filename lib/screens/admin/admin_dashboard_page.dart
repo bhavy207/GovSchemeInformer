@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:govunity_connect/helper/firestore_helper.dart';
 import 'package:govunity_connect/modal/scheme_modal.dart';
 import 'package:govunity_connect/screens/admin/add_edit_scheme_page.dart';
+import '../../views/screens/api_integration_page.dart';
 
 class AdminDashboardPage extends StatefulWidget {
   const AdminDashboardPage({super.key});
@@ -23,6 +24,18 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
         ),
         backgroundColor: Colors.blue,
         iconTheme: const IconThemeData(color: Colors.white),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.api, color: Colors.white),
+            tooltip: 'Lab 9 API Test',
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const ApiIntegrationPage()),
+              );
+            },
+          ),
+        ],
       ),
       body: StreamBuilder<List<SchemeModal>>(
         stream: FireStoreHelper.fireStoreHelper.getSchemesStream(),

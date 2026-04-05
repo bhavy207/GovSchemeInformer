@@ -1,4 +1,4 @@
-﻿import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -13,6 +13,11 @@ import 'package:govunity_connect/screens/admin/admin_dashboard_page.dart' as gov
 import 'favourite_page.dart';
 import 'login_page.dart';
 import 'national/list_of_scheme.dart';
+import 'api_integration_page.dart';
+import 'lab10_notification_page.dart';
+import '../../utils/routes_util.dart';
+
+
 
 class AllSchemePage extends StatefulWidget {
   const AllSchemePage({super.key});
@@ -640,6 +645,44 @@ class _AllSchemePageState extends State<AllSchemePage>
                               : 'Settings',
                       style: GoogleFonts.raleway(
                           color: Colors.black, fontSize: 19),
+                    ),
+                  ),
+                  ListTile(
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const ApiIntegrationPage(),
+                        ),
+                      );
+                    },
+                    leading: const Icon(color: Colors.black, Icons.api),
+                    title: Text(
+                      'API Test (Lab 9)',
+                      style: GoogleFonts.raleway(color: Colors.black, fontSize: 19),
+                    ),
+                  ),
+                  ListTile(
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const Lab10NotificationPage(),
+                        ),
+                      );
+                    },
+                    leading: const Icon(color: Colors.black, Icons.notifications_active),
+                    title: Text(
+                      'Notifications (Lab 10)',
+                      style: GoogleFonts.raleway(color: Colors.black, fontSize: 19),
+                    ),
+                  ),
+                  ListTile(
+                    onTap: () {
+                      Navigator.of(context).pushNamed(MyRoutes.analyticsPage);
+                    },
+                    leading: const Icon(color: Colors.black, Icons.bar_chart),
+                    title: Text(
+                      'Analytics (Lab 11)',
+                      style: GoogleFonts.raleway(color: Colors.black, fontSize: 19),
                     ),
                   ),
                   if (FirebaseAuth.instance.currentUser?.email == 'admin@govunity.com')

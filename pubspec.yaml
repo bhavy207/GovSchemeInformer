@@ -55,6 +55,10 @@ dependencies:
   flutter_expandable_fab:
   simple_animations:
   showcaseview: ^5.0.1
+  firebase_messaging: ^16.1.3
+  flutter_local_notifications: ^17.0.0
+  timezone: ^0.9.0
+  fl_chart: ^0.71.0
 
 
 flutter_icons:

@@ -1,0 +1,8 @@
+[info] Don't invoke 'print' in production code (D:\Projects\govunity_connect3-master\lib\main.dart:32:3)
+[info] 'value' is deprecated and shouldn't be used. Use initialValue instead. This will set the initial value for the form field. This feature was deprecated after v3.33.0-1.0.pre (D:\Projects\govunity_connect3-master\lib\screens\admin\add_edit_scheme_page.dart:173:29)
+[info] 'value' is deprecated and shouldn't be used. Use initialValue instead. This will set the initial value for the form field. This feature was deprecated after v3.33.0-1.0.pre (D:\Projects\govunity_connect3-master\lib\screens\admin\add_edit_scheme_page.dart:186:29)
+[info] 'androidAllowWhileIdle' is deprecated and shouldn't be used. Deprecated in favor of the androidScheduleMode parameter (D:\Projects\govunity_connect3-master\lib\services\notification_service.dart:121:7)
+[info] Don't invoke 'print' in production code (D:\Projects\govunity_connect3-master\lib\services\notification_service.dart:37:11)
+[info] Parameter 'key' could be a super parameter (D:\Projects\govunity_connect3-master\lib\views\screens\api_integration_page.dart:6:9)
+[info] Parameter 'key' could be a super parameter (D:\Projects\govunity_connect3-master\lib\views\screens\lab10_notification_page.dart:5:9)
+[info] 'activeColor' is deprecated and shouldn't be used. Use activeThumbColor instead. This feature was deprecated after v3.31.0-2.0.pre (D:\Projects\govunity_connect3-master\lib\views\screens\setting_page.dart:165:19)

@@ -15,4 +15,5 @@ class MyRoutes {
   static String listOfStateScheme = 'ListOfStateScheme';
   static String educationPagestate = 'EducationState';
   static String infraStatePage = 'InfraStatePage';
+  static String analyticsPage = 'AnalyticsPage';
 }
