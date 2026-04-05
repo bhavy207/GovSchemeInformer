@@ -1,4 +1,5 @@
 ﻿import 'package:flutter/material.dart';
+import 'package:govunity_connect/helper/firestore_helper.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:govunity_connect/screens/state/infra_link_state.dart';
@@ -19,9 +20,7 @@ class InfraState extends StatefulWidget {
 class _InfraStateState extends State<InfraState> {
   @override
   Widget build(BuildContext context) {
-    List<SchemeModal> dataWWSchemes =
-        masterList.where((scheme) => sIdata.contains(scheme)).toList();
-    return Consumer<LanguageController>(builder: (context, pro, child) {
+        return Consumer<LanguageController>(builder: (context, pro, child) {
       return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
@@ -40,7 +39,28 @@ class _InfraStateState extends State<InfraState> {
                 fontWeight: FontWeight.bold,
               ),
             )),
-        body: ListView.builder(
+        body: StreamBuilder<List<SchemeModal>>(
+          stream: FireStoreHelper.fireStoreHelper.getSchemesStream(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            if (snapshot.hasError) {
+              return Center(child: Text('Error: ${snapshot.error}'));
+            }
+            final allSchemes = snapshot.data ?? [];
+            final dataWWSchemes = allSchemes.where((s) => s.category == 'Infrastructure' && s.type == 'State').toList();
+            
+            if (dataWWSchemes.isEmpty) {
+              return Center(
+                child: Text(
+                  pro.isGujarati ? 'કોઈ યોજના ઉપલબ્ધ નથી' : pro.isHindi ? 'कोई योजना उपलब्ध नहीं है' : 'No schemes available',
+                  style: GoogleFonts.raleway(fontSize: 18),
+                ),
+              );
+            }
+
+            return ListView.builder(
           itemCount: dataWWSchemes.length,
           itemBuilder: (BuildContext context, int index) {
             return ListTile(
@@ -88,6 +108,8 @@ class _InfraStateState extends State<InfraState> {
                 );
               },
             );
+          },
+        );
           },
         ),
         floatingActionButton: Align(

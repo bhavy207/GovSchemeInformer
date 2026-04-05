@@ -1,4 +1,5 @@
 ﻿import 'package:flutter/material.dart';
+import 'package:govunity_connect/helper/firestore_helper.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:govunity_connect/screens/national/education_link.dart';
@@ -19,9 +20,7 @@ class EducationPage extends StatefulWidget {
 class _EducationPageState extends State<EducationPage> {
   @override
   Widget build(BuildContext context) {
-    List<SchemeModal> edata2Schemes =
-        masterList.where((scheme) => edata.contains(scheme)).toList();
-    return Consumer<LanguageController>(builder: (context, pro, child) {
+        return Consumer<LanguageController>(builder: (context, pro, child) {
       return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
@@ -40,7 +39,28 @@ class _EducationPageState extends State<EducationPage> {
                 fontWeight: FontWeight.bold,
               ),
             )),
-        body: ListView.builder(
+        body: StreamBuilder<List<SchemeModal>>(
+          stream: FireStoreHelper.fireStoreHelper.getSchemesStream(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            if (snapshot.hasError) {
+              return Center(child: Text('Error: ${snapshot.error}'));
+            }
+            final allSchemes = snapshot.data ?? [];
+            final edata2Schemes = allSchemes.where((s) => s.category == 'Education' && s.type == 'National').toList();
+            
+            if (edata2Schemes.isEmpty) {
+              return Center(
+                child: Text(
+                  pro.isGujarati ? 'કોઈ યોજના ઉપલબ્ધ નથી' : pro.isHindi ? 'कोई योजना उपलब्ध नहीं है' : 'No schemes available',
+                  style: GoogleFonts.raleway(fontSize: 18),
+                ),
+              );
+            }
+
+            return ListView.builder(
           itemCount: edata2Schemes.length,
           itemBuilder: (BuildContext context, int index) {
             return ListTile(
@@ -88,6 +108,8 @@ class _EducationPageState extends State<EducationPage> {
                 );
               },
             );
+          },
+        );
           },
         ),
         floatingActionButton: Align(

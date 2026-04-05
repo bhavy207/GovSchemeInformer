@@ -1,5 +1,6 @@
 ﻿import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:govunity_connect/helper/firestore_helper.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:govunity_connect/screens/national/agriculture_link.dart';
@@ -18,9 +19,7 @@ class AgriculturePage extends StatefulWidget {
 class _AgriculturePageState extends State<AgriculturePage> {
   @override
   Widget build(BuildContext context) {
-    List<SchemeModal> data1Schemes =
-        masterList.where((scheme) => data.contains(scheme)).toList();
-    return Consumer<LanguageController>(
+        return Consumer<LanguageController>(
       builder: (context, pro, child) {
         return Scaffold(
           backgroundColor: Colors.white,
@@ -40,7 +39,28 @@ class _AgriculturePageState extends State<AgriculturePage> {
                   fontWeight: FontWeight.bold,
                 ),
               )),
-          body: ListView.builder(
+          body: StreamBuilder<List<SchemeModal>>(
+          stream: FireStoreHelper.fireStoreHelper.getSchemesStream(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            if (snapshot.hasError) {
+              return Center(child: Text('Error: ${snapshot.error}'));
+            }
+            final allSchemes = snapshot.data ?? [];
+            final data1Schemes = allSchemes.where((s) => s.category == 'Agriculture' && s.type == 'National').toList();
+            
+            if (data1Schemes.isEmpty) {
+              return Center(
+                child: Text(
+                  pro.isGujarati ? 'કોઈ યોજના ઉપલબ્ધ નથી' : pro.isHindi ? 'कोई योजना उपलब्ध नहीं है' : 'No schemes available',
+                  style: GoogleFonts.raleway(fontSize: 18),
+                ),
+              );
+            }
+
+            return ListView.builder(
             itemCount: data1Schemes.length,
             itemBuilder: (BuildContext context, int index) {
               return ListTile(
@@ -94,6 +114,8 @@ class _AgriculturePageState extends State<AgriculturePage> {
               );
             },
           ),
+          },
+        ),
           floatingActionButton: Align(
             alignment: Alignment.bottomRight,
             child: FloatingActionButton.extended(

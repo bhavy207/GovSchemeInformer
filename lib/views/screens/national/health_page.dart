@@ -1,4 +1,5 @@
 ﻿import 'package:flutter/material.dart';
+import 'package:govunity_connect/helper/firestore_helper.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:govunity_connect/screens/national/health_link.dart';
@@ -19,9 +20,7 @@ class HealthPage extends StatefulWidget {
 class _HealthPageState extends State<HealthPage> {
   @override
   Widget build(BuildContext context) {
-    List<SchemeModal> data3Schemes =
-        masterList.where((scheme) => hdata.contains(scheme)).toList();
-    return Consumer<LanguageController>(builder: (context, pro, child) {
+        return Consumer<LanguageController>(builder: (context, pro, child) {
       return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
@@ -42,7 +41,28 @@ class _HealthPageState extends State<HealthPage> {
             ),
           ),
         ),
-        body: ListView.builder(
+        body: StreamBuilder<List<SchemeModal>>(
+          stream: FireStoreHelper.fireStoreHelper.getSchemesStream(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            if (snapshot.hasError) {
+              return Center(child: Text('Error: ${snapshot.error}'));
+            }
+            final allSchemes = snapshot.data ?? [];
+            final data3Schemes = allSchemes.where((s) => s.category == 'Health' && s.type == 'National').toList();
+            
+            if (data3Schemes.isEmpty) {
+              return Center(
+                child: Text(
+                  pro.isGujarati ? 'કોઈ યોજના ઉપલબ્ધ નથી' : pro.isHindi ? 'कोई योजना उपलब्ध नहीं है' : 'No schemes available',
+                  style: GoogleFonts.raleway(fontSize: 18),
+                ),
+              );
+            }
+
+            return ListView.builder(
           itemCount: data3Schemes.length,
           itemBuilder: (BuildContext context, int index) {
             return ListTile(
@@ -90,6 +110,8 @@ class _HealthPageState extends State<HealthPage> {
                 );
               },
             );
+          },
+        );
           },
         ),
         floatingActionButton: Align(
