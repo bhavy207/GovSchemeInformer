@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:govunity_connect/helper/firestore_helper.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -11,7 +11,8 @@ import '../../../controller/tts_controller.dart';
 import '../../../modal/scheme_modal.dart';
 
 class EducationState extends StatefulWidget {
-  const EducationState({super.key});
+  final String stateName;
+  const EducationState({super.key, this.stateName = 'Gujarat'});
 
   @override
   State<EducationState> createState() => _EducationStateState();
@@ -40,7 +41,7 @@ class _EducationStateState extends State<EducationState> {
               ),
             )),
         body: StreamBuilder<List<SchemeModal>>(
-          stream: FireStoreHelper.fireStoreHelper.getSchemesStream(),
+          stream: FireStoreHelper.fireStoreHelper.getCombinedSchemesStream(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
@@ -49,7 +50,7 @@ class _EducationStateState extends State<EducationState> {
               return Center(child: Text('Error: ${snapshot.error}'));
             }
             final allSchemes = snapshot.data ?? [];
-            final sEdata2Schemes = allSchemes.where((s) => s.category == 'Education' && s.type == 'State').toList();
+            final sEdata2Schemes = allSchemes.where((s) => s.category == 'Education' && s.type == 'State' && s.state == widget.stateName).toList();
             
             if (sEdata2Schemes.isEmpty) {
               return Center(

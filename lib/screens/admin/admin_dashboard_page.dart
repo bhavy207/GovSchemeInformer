@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:govunity_connect/helper/firestore_helper.dart';
 import 'package:govunity_connect/modal/scheme_modal.dart';
 import 'package:govunity_connect/screens/admin/add_edit_scheme_page.dart';
+import 'package:govunity_connect/screens/admin/migrate_schemes_page.dart';
 import '../../views/screens/api_integration_page.dart';
 
 class AdminDashboardPage extends StatefulWidget {
@@ -38,7 +39,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
         ],
       ),
       body: StreamBuilder<List<SchemeModal>>(
-        stream: FireStoreHelper.fireStoreHelper.getSchemesStream(),
+        stream: FireStoreHelper.fireStoreHelper.getCombinedSchemesStream(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -65,7 +66,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                     style: GoogleFonts.raleway(
                         fontWeight: FontWeight.bold, fontSize: 16),
                   ),
-                  subtitle: Text("${scheme.type} | ${scheme.category}"),
+                  subtitle: Text("${scheme.type} | ${scheme.category} ${scheme.documentId == null ? '(Local)' : ''}"),
                   trailing: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -82,12 +83,13 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                           );
                         },
                       ),
-                      IconButton(
-                        icon: const Icon(Icons.delete, color: Colors.red),
-                        onPressed: () {
-                          _showDeleteDialog(context, scheme);
-                        },
-                      ),
+                      if (scheme.documentId != null)
+                        IconButton(
+                          icon: const Icon(Icons.delete, color: Colors.red),
+                          onPressed: () {
+                            _showDeleteDialog(context, scheme);
+                          },
+                        ),
                     ],
                   ),
                 ),
@@ -96,18 +98,39 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
           );
         },
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: Colors.blue,
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const AddEditSchemePage(),
-            ),
-          );
-        },
-        label: const Text('Add Scheme', style: TextStyle(color: Colors.white)),
-        icon: const Icon(Icons.add, color: Colors.white),
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          FloatingActionButton.extended(
+            heroTag: 'migrate',
+            backgroundColor: Colors.orange,
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const MigrateSchemesPage(),
+                ),
+              );
+            },
+            label: const Text('Migrate Local Data', style: TextStyle(color: Colors.white)),
+            icon: const Icon(Icons.cloud_upload, color: Colors.white),
+          ),
+          const SizedBox(height: 10),
+          FloatingActionButton.extended(
+            heroTag: 'add',
+            backgroundColor: Colors.blue,
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const AddEditSchemePage(),
+                ),
+              );
+            },
+            label: const Text('Add Scheme', style: TextStyle(color: Colors.white)),
+            icon: const Icon(Icons.add, color: Colors.white),
+          ),
+        ],
       ),
     );
   }

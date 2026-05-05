@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:govunity_connect/helper/firestore_helper.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -11,7 +11,8 @@ import '../../../modal/scheme_modal.dart';
 import 'package:flutter/cupertino.dart';
 
 class RuralState extends StatefulWidget {
-  const RuralState({super.key});
+  final String stateName;
+  const RuralState({super.key, this.stateName = 'Gujarat'});
 
   @override
   State<RuralState> createState() => _RuralStateState();
@@ -40,7 +41,7 @@ class _RuralStateState extends State<RuralState> {
               ),
             )),
         body: StreamBuilder<List<SchemeModal>>(
-          stream: FireStoreHelper.fireStoreHelper.getSchemesStream(),
+          stream: FireStoreHelper.fireStoreHelper.getCombinedSchemesStream(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
@@ -49,9 +50,9 @@ class _RuralStateState extends State<RuralState> {
               return Center(child: Text('Error: ${snapshot.error}'));
             }
             final allSchemes = snapshot.data ?? [];
-            final data5Schemes = allSchemes.where((s) => s.category == 'Rural' && s.type == 'State').toList();
+            final sRdata3Schemes = allSchemes.where((s) => s.category == 'Rural' && s.type == 'State' && s.state == widget.stateName).toList();
             
-            if (data5Schemes.isEmpty) {
+            if (sRdata3Schemes.isEmpty) {
               return Center(
                 child: Text(
                   pro.isGujarati ? 'કોઈ યોજના ઉપલબ્ધ નથી' : pro.isHindi ? 'कोई योजना उपलब्ध नहीं है' : 'No schemes available',
@@ -61,7 +62,7 @@ class _RuralStateState extends State<RuralState> {
             }
 
             return ListView.builder(
-          itemCount: data5Schemes.length,
+          itemCount: sRdata3Schemes.length,
           itemBuilder: (BuildContext context, int index) {
             return ListTile(
               leading: Text(
@@ -75,10 +76,10 @@ class _RuralStateState extends State<RuralState> {
                   padding: const EdgeInsets.all(10.0),
                   child: Text(
                     pro.isGujarati
-                        ? data5Schemes[index].titleG
+                        ? sRdata3Schemes[index].titleG
                         : pro.isHindi
-                            ? data5Schemes[index].titleH
-                            : data5Schemes[index].title,
+                            ? sRdata3Schemes[index].titleH
+                            : sRdata3Schemes[index].title,
                     style: GoogleFonts.raleway(
                         fontWeight: FontWeight.bold, fontSize: 19),
                   ),
@@ -87,12 +88,12 @@ class _RuralStateState extends State<RuralState> {
               trailing: IconButton(
                 onPressed: () {
                   setState(() {
-                    data5Schemes[index].isFavorited =
-                        !data5Schemes[index].isFavorited;
+                    sRdata3Schemes[index].isFavorited =
+                        !sRdata3Schemes[index].isFavorited;
                   });
                 },
                 icon: Icon(
-                  data5Schemes[index].isFavorited
+                  sRdata3Schemes[index].isFavorited
                       ? CupertinoIcons.heart_fill
                       : CupertinoIcons.heart,
                   color: Colors.red,
@@ -103,7 +104,7 @@ class _RuralStateState extends State<RuralState> {
                   context,
                   MaterialPageRoute(
                     builder: (context) =>
-                        AgricultureDetailPage(data5Schemes[index]),
+                        AgricultureDetailPage(sRdata3Schemes[index]),
                   ),
                 );
               },

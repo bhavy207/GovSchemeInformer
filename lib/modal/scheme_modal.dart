@@ -3,6 +3,7 @@ class SchemeModal {
   String? documentId; // New field for Firestore ID
   String category;    // e.g., 'Agriculture', 'Education'
   String type;        // 'National' or 'State'
+  String state;       // 'National', 'Gujarat', 'Uttar Pradesh', 'Maharashtra'
   final String title;
   final String titleG;
   final String titleH;
@@ -23,6 +24,7 @@ class SchemeModal {
     this.documentId,
     this.category = 'General',
     this.type = 'National',
+    this.state = 'National',
     required this.title,
     required this.description,
     required this.document,
@@ -44,6 +46,7 @@ class SchemeModal {
       'id': id,
       'category': category,
       'type': type,
+      'state': state,
       'title': title,
       'titleG': titleG,
       'titleH': titleH,
@@ -71,6 +74,7 @@ class SchemeModal {
       documentId: docId,
       category: json['category'] ?? 'General',
       type: json['type'] ?? 'National',
+      state: json['state'] ?? (json['type'] == 'National' ? 'National' : 'Gujarat'),
       title: json['title'] ?? '',
       titleG: json['titleG'] ?? '',
       titleH: json['titleH'] ?? '',
@@ -91,6 +95,21 @@ class SchemeModal {
 
 List<SchemeModal> masterList = [];
 List<SchemeModal> favoriteSchemes = [];
+
+// Uttar Pradesh Data
+List<SchemeModal> upData = [];
+List<SchemeModal> upEData = [];
+List<SchemeModal> upRData = [];
+List<SchemeModal> upHData = [];
+List<SchemeModal> upIData = [];
+
+// Maharashtra Data
+List<SchemeModal> mhData = [];
+List<SchemeModal> mhEData = [];
+List<SchemeModal> mhRData = [];
+List<SchemeModal> mhHData = [];
+List<SchemeModal> mhIData = [];
+
 List<SchemeModal> data = [
   SchemeModal(
       title: 'Kisan Credit Card (KCC) Scheme',

@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:govunity_connect/helper/firestore_helper.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -11,7 +11,8 @@ import '../../../controller/tts_controller.dart';
 import '../../../modal/scheme_modal.dart';
 
 class HealthStatePage extends StatefulWidget {
-  const HealthStatePage({super.key});
+  final String stateName;
+  const HealthStatePage({super.key, this.stateName = 'Gujarat'});
 
   @override
   State<HealthStatePage> createState() => _HealthStatePageState();
@@ -42,7 +43,7 @@ class _HealthStatePageState extends State<HealthStatePage> {
           ),
         ),
         body: StreamBuilder<List<SchemeModal>>(
-          stream: FireStoreHelper.fireStoreHelper.getSchemesStream(),
+          stream: FireStoreHelper.fireStoreHelper.getCombinedSchemesStream(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
@@ -51,7 +52,7 @@ class _HealthStatePageState extends State<HealthStatePage> {
               return Center(child: Text('Error: ${snapshot.error}'));
             }
             final allSchemes = snapshot.data ?? [];
-            final data3Schemes = allSchemes.where((s) => s.category == 'Health' && s.type == 'State').toList();
+            final data3Schemes = allSchemes.where((s) => s.category == 'Health' && s.type == 'State' && s.state == widget.stateName).toList();
             
             if (data3Schemes.isEmpty) {
               return Center(

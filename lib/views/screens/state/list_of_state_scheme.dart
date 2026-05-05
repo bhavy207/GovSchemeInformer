@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:govunity_connect/screens/state/infra_state_page.dart';
 import 'package:govunity_connect/screens/state/agriculture_state.dart';
@@ -10,7 +10,8 @@ import 'package:govunity_connect/controller/language_controller.dart';
 import 'education_page_state.dart';
 
 class ListOfSchemeState extends StatefulWidget {
-  const ListOfSchemeState({super.key});
+  final String stateName;
+  const ListOfSchemeState({super.key, this.stateName = 'Gujarat'});
 
   @override
   State<ListOfSchemeState> createState() => _ListOfSchemeStateState();
@@ -30,10 +31,10 @@ class _ListOfSchemeStateState extends State<ListOfSchemeState> {
             backgroundColor: Colors.blue,
             title: Text(
               pro.isGujarati
-                  ? 'ગુજરાત સહકાર સહાય '
+                  ? '${widget.stateName} સહકાર સહાય '
                   : pro.isHindi
-                      ? 'गुजरात सरकार योजना'
-                      : 'Gujarat Government Scheme',
+                      ? '${widget.stateName} सरकार योजना'
+                      : '${widget.stateName} Government Scheme',
               style: GoogleFonts.raleway(
                   color: Colors.white, fontWeight: FontWeight.bold),
             ),
@@ -50,7 +51,7 @@ class _ListOfSchemeStateState extends State<ListOfSchemeState> {
                     onTap: () => Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const AgricultureStatePage(),
+                        builder: (context) => AgricultureStatePage(stateName: widget.stateName),
                       ),
                     ),
                     child: ListTile(
@@ -89,7 +90,7 @@ class _ListOfSchemeStateState extends State<ListOfSchemeState> {
                     onTap: () => Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const EducationState(),
+                        builder: (context) => EducationState(stateName: widget.stateName),
                       ),
                     ),
                     child: ListTile(
@@ -125,7 +126,7 @@ class _ListOfSchemeStateState extends State<ListOfSchemeState> {
                     onTap: () => Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const RuralState(),
+                        builder: (context) => RuralState(stateName: widget.stateName),
                       ),
                     ),
                     child: ListTile(
@@ -161,7 +162,7 @@ class _ListOfSchemeStateState extends State<ListOfSchemeState> {
                     onTap: () => Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const HealthStatePage(),
+                        builder: (context) => HealthStatePage(stateName: widget.stateName),
                       ),
                     ),
                     child: ListTile(
@@ -200,7 +201,7 @@ class _ListOfSchemeStateState extends State<ListOfSchemeState> {
                     onTap: () => Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const InfraState(),
+                        builder: (context) => InfraState(stateName: widget.stateName),
                       ),
                     ),
                     child: ListTile(
@@ -236,7 +237,7 @@ class _ListOfSchemeStateState extends State<ListOfSchemeState> {
                     onTap: () => Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const Wstate(),
+                        builder: (context) => Wstate(stateName: widget.stateName),
                       ),
                     ),
                     child: ListTile(

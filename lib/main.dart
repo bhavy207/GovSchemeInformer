@@ -45,6 +45,33 @@ void main() async {
   // WidgetsFlutterBinding.ensureInitialized();
   // await Firebase.initializeApp();
 
+  // National Schemes
+  for (var s in data) { s.category = 'Agriculture'; s.type = 'National'; s.state = 'National'; }
+  for (var s in edata) { s.category = 'Education'; s.type = 'National'; s.state = 'National'; }
+  for (var s in rdata) { s.category = 'Rural'; s.type = 'National'; s.state = 'National'; }
+  for (var s in hdata) { s.category = 'Health'; s.type = 'National'; s.state = 'National'; }
+  for (var s in idata) { s.category = 'Infrastructure'; s.type = 'National'; s.state = 'National'; }
+
+  // Gujarat Schemes
+  for (var s in sdata) { s.category = 'Agriculture'; s.type = 'State'; s.state = 'Gujarat'; }
+  for (var s in sRdata) { s.category = 'Rural'; s.type = 'State'; s.state = 'Gujarat'; }
+  for (var s in sHdata) { s.category = 'Health'; s.type = 'State'; s.state = 'Gujarat'; }
+  for (var s in sEdata) { s.category = 'Education'; s.type = 'State'; s.state = 'Gujarat'; }
+  for (var s in sIdata) { s.category = 'Infrastructure'; s.type = 'State'; s.state = 'Gujarat'; }
+  for (var s in sWdata) { s.category = 'Welfare'; s.type = 'State'; s.state = 'Gujarat'; }
+
+  // UP Schemes (Using some national samples as placeholders)
+  upData.add(SchemeModal.fromJson(data[0].toJson())); 
+  upEData.add(SchemeModal.fromJson(edata[0].toJson()));
+  for (var s in upData) { s.category = 'Agriculture'; s.type = 'State'; s.state = 'Uttar Pradesh'; }
+  for (var s in upEData) { s.category = 'Education'; s.type = 'State'; s.state = 'Uttar Pradesh'; }
+
+  // MH Schemes (Using some national samples as placeholders)
+  mhData.add(SchemeModal.fromJson(data[0].toJson()));
+  mhHData.add(SchemeModal.fromJson(hdata[0].toJson()));
+  for (var s in mhData) { s.category = 'Agriculture'; s.type = 'State'; s.state = 'Maharashtra'; }
+  for (var s in mhHData) { s.category = 'Health'; s.type = 'State'; s.state = 'Maharashtra'; }
+
   masterList.addAll(data);
   masterList.addAll(edata);
   masterList.addAll(rdata);
@@ -56,6 +83,10 @@ void main() async {
   masterList.addAll(sEdata);
   masterList.addAll(sIdata);
   masterList.addAll(sWdata);
+  masterList.addAll(upData);
+  masterList.addAll(upEData);
+  masterList.addAll(mhData);
+  masterList.addAll(mhHData);
   runApp(
     MultiProvider(
       providers: [

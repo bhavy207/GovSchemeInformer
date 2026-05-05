@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:govunity_connect/helper/firestore_helper.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -11,7 +11,8 @@ import '../../../modal/scheme_modal.dart';
 import 'package:flutter/cupertino.dart';
 
 class InfraState extends StatefulWidget {
-  const InfraState({super.key});
+  final String stateName;
+  const InfraState({super.key, this.stateName = 'Gujarat'});
 
   @override
   State<InfraState> createState() => _InfraStateState();
@@ -40,7 +41,7 @@ class _InfraStateState extends State<InfraState> {
               ),
             )),
         body: StreamBuilder<List<SchemeModal>>(
-          stream: FireStoreHelper.fireStoreHelper.getSchemesStream(),
+          stream: FireStoreHelper.fireStoreHelper.getCombinedSchemesStream(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
@@ -49,7 +50,7 @@ class _InfraStateState extends State<InfraState> {
               return Center(child: Text('Error: ${snapshot.error}'));
             }
             final allSchemes = snapshot.data ?? [];
-            final dataWWSchemes = allSchemes.where((s) => s.category == 'Infrastructure' && s.type == 'State').toList();
+            final dataWWSchemes = allSchemes.where((s) => s.category == 'Infrastructure' && s.type == 'State' && s.state == widget.stateName).toList();
             
             if (dataWWSchemes.isEmpty) {
               return Center(

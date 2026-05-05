@@ -808,7 +808,7 @@ class _AllSchemePageState extends State<AllSchemePage>
                   GestureDetector(
                     onTap: () => Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) => const ListOfSchemeState(),
+                        builder: (context) => const ListOfSchemeState(stateName: 'Gujarat'),
                       ),
                     ),
                     child: Card(
@@ -848,7 +848,7 @@ class _AllSchemePageState extends State<AllSchemePage>
                   GestureDetector(
                     onTap: () => Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) => const ListOfSchemeState(),
+                        builder: (context) => const ListOfSchemeState(stateName: 'Uttar Pradesh'),
                       ),
                     ),
                     child: Card(
@@ -887,7 +887,7 @@ class _AllSchemePageState extends State<AllSchemePage>
                   ),
                   GestureDetector(
                     onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => const ListOfSchemeState())),
+                        builder: (context) => const ListOfSchemeState(stateName: 'Maharashtra'))),
                     child: Card(
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),

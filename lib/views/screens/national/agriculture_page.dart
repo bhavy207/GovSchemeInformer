@@ -40,7 +40,7 @@ class _AgriculturePageState extends State<AgriculturePage> {
                 ),
               )),
           body: StreamBuilder<List<SchemeModal>>(
-          stream: FireStoreHelper.fireStoreHelper.getSchemesStream(),
+          stream: FireStoreHelper.fireStoreHelper.getCombinedSchemesStream(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
@@ -48,13 +48,20 @@ class _AgriculturePageState extends State<AgriculturePage> {
             if (snapshot.hasError) {
               return Center(child: Text('Error: ${snapshot.error}'));
             }
-            final allSchemes = snapshot.data ?? [];
-            final data1Schemes = allSchemes.where((s) => s.category == 'Agriculture' && s.type == 'National').toList();
-            
+            final allSchemesFromFirestore = snapshot.data ?? [];
+            final allSchemes = allSchemesFromFirestore.isEmpty ? masterList : allSchemesFromFirestore;
+            final data1Schemes = allSchemes
+                .where((s) => s.category == 'Agriculture' && s.type == 'National')
+                .toList();
+
             if (data1Schemes.isEmpty) {
               return Center(
                 child: Text(
-                  pro.isGujarati ? 'કોઈ યોજના ઉપલબ્ધ નથી' : pro.isHindi ? 'कोई योजना उपलब्ध नहीं है' : 'No schemes available',
+                  pro.isGujarati
+                      ? 'કોઈ યોજના ઉપલબ્ધ નથી'
+                      : pro.isHindi
+                          ? 'कोई योजना उपलब्ध नहीं है'
+                          : 'No schemes available',
                   style: GoogleFonts.raleway(fontSize: 18),
                 ),
               );

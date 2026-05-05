@@ -1,4 +1,4 @@
-﻿import 'dart:developer';
+import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -29,8 +29,16 @@ class FireStoreHelper {
   Stream<List<SchemeModal>> getSchemesStream() {
     return fireStore.collection(schemesCollection).snapshots().map((snapshot) {
       return snapshot.docs.map((doc) {
-         return SchemeModal.fromJson(doc.data(), docId: doc.id);
+        return SchemeModal.fromJson(doc.data(), docId: doc.id);
       }).toList();
+    });
+  }
+
+  Stream<List<SchemeModal>> getCombinedSchemesStream() {
+    return getSchemesStream().map((firestoreSchemes) {
+      // Always include built-in master schemes and append Firestore schemes.
+      // This avoids losing built-in categories when there are any Firestore documents.
+      return [...masterList, ...firestoreSchemes];
     });
   }
 
